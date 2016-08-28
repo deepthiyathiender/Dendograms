@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <style>
+
+        .node {
+            cursor: pointer;
+        }
+
+        .node circle {
+            fill: #fff;
+            stroke: steelblue;
+            stroke-width: 3px;
+        }
+
+        .node text {
+            font: 12px sans-serif;
+        }
+
+        .link {
+            fill: none;
+            stroke: #ccc;
+            stroke-width: 20px;
+            stroke-opacity: 0.5;
+        }
+
+        .tree_headers{
+            padding-left: 90px;
+        }
+
+
+        .fancy_button{
+            background: rgb(21, 77, 115);
+            color: #000;
+            display: inline-block;
+            margin: 10px;
+            background: rgba(113, 196, 216, 0.5);
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            text-decoration: none;
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .fancy_button:hover {
+            background: rgba(198, 163, 205, 0.8);
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+<table style="padding-left: 180px">
+    <tr>
+        <td class="tree_headers">
+            <h3>Sector</h3>
+        </td>
+        <td class="tree_headers">
+            <h3>Counterparty</h3>
+        </td>
+        <td class="tree_headers">
+            <h3>Industry Group</h3>
+        </td>
+        <td class="tree_headers">
+            <h3>Industry</h3>
+        </td>
+        <td class="tree_headers">
+            <h3>Bonds</h3>
+        </td>
+        <td class="tree_headers">
+            <input type="button" class="fancy_button" value="Expand All" onclick="expandAll()"/>
+        </td>
+        <td>
+            <input type="button" class="fancy_button" value="Collapse All" onclick="collapseAll()"/>
+        </td>
+    </tr>
+</table>
+
+<!-- load the d3.js library -->
+<script src="http://d3js.org/d3.v3.min.js"></script>
+
+<script>
+
+    var treeData = [
+        {
+            "name": "Counterparty",
+            "parent": "null",
+            "children": [
+                {
+                    "name": "Financials",
+                    "parent": "Counterparty",
+                    "children": [
+                        {
+                            "name": "Citi Bank",
+                            "parent": "Counterparty",
+                            "children": [
+                                {
+                                    "name": "Banks",
+                                    "parent": "Citi Bank",
+                                    "children": [
+                                        {
+                                            "name": "Commercial Banks",
+                                            "parent": "Banks",
+                                            "children": [
+                                                {
+                                                    "name": "CANADA BONDS",
+                                                    "parent": "Commercial Banks"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Thrifts & Mortgage Finance",
+                                            "parent": "Banks",
+                                            "children": [
+                                                {
+                                                    "name": "CANADA BONDS",
+                                                    "parent": "Thrifts & Mortgage Finance"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Diversified Financials",
+                                    "parent": "Citi Bank",
+                                    "children": [
+                                        {
+                                            "name": "Diversified Financial Services",
+                                            "parent": "Diversified Financials",
+                                            "children": [
+                                                {
+                                                    "name": "CANADA BONDS",
+                                                    "parent": "Diversified Financial Services"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Thrifts & Mortgage Finance",
+                                            "parent": "Diversified Financials",
+                                            "children": [
+                                                {
+                                                    "name": "CANADA BONDS",
+                                                    "parent": "Thrifts & Mortgage Finance"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Capital Markets",
+                                            "parent": "Diversified Financials",
+                                            "children": [
+                                                {
+                                                    "name": "CANADA BONDS",
+                                                    "parent": "Capital Markets"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Insurance",
+                                    "parent": "Citi Bank",
+                                    "children": [
+                                        {
+                                            "name": "Insurance",
+                                            "parent": "Insurance",
+                                            "children": [
+                                                {
+                                                    "name": "CANADA BONDS",
+                                                    "parent": "Insurance"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Real Estate",
+                                    "parent": "Citi Bank",
+                                    "children": [
+                                        {
+                                            "name": "Real Estate -- Discontinued effective 04/28/2006",
+                                            "parent": "Real Estate",
+                                            "children": [
+                                                {
+                                                    "name": "CANADA BONDS",
+                                                    "parent": "Real Estate -- Discontinued effective 04/28/2006"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Real Estate Investment Trusts (REITs)",
+                                            "parent": "Real Estate",
+                                            "children": [
+                                                {
+                                                    "name": "CANADA BONDS",
+                                                    "parent": "Real Estate Investment Trusts (REITs)"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Real Estate Management & Development",
+                                            "parent": "Real Estate",
+                                            "children": [
+                                                {
+                                                    "name": "CANADA BONDS",
+                                                    "parent": "Real Estate Management & Development"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "US Government",
+                            "parent": "Counterparty",
+                            "children": [
+                                {
+                                    "name": "Banks",
+                                    "parent": "US Government",
+                                    "children": [
+                                        {
+                                            "name": "Commercial Banks",
+                                            "parent": "Banks",
+                                            "children": [
+                                                {
+                                                    "name": "US Treasuries Bond",
+                                                    "parent": "Commercial Banks"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Thrifts & Mortgage Finance",
+                                            "parent": "Banks",
+                                            "children": [
+                                                {
+                                                    "name": "US Treasuries Bond",
+                                                    "parent": "Thrifts & Mortgage Finance"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Diversified Financials",
+                                    "parent": "US Government",
+                                    "children": [
+                                        {
+                                            "name": "Diversified Financial Services",
+                                            "parent": "Diversified Financials",
+                                            "children": [
+                                                {
+                                                    "name": "US Treasuries Bond",
+                                                    "parent": "Diversified Financial Services"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Thrifts & Mortgage Finance",
+                                            "parent": "Diversified Financials",
+                                            "children": [
+                                                {
+                                                    "name": "US Treasuries Bond",
+                                                    "parent": "Thrifts & Mortgage Finance"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Capital Markets",
+                                            "parent": "Diversified Financials",
+                                            "children": [
+                                                {
+                                                    "name": "US Treasuries Bond",
+                                                    "parent": "Capital Markets"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Insurance",
+                                    "parent": "US Government",
+                                    "children": [
+                                        {
+                                            "name": "Insurance",
+                                            "parent": "Insurance",
+                                            "children": [
+                                                {
+                                                    "name": "US Treasuries Bond",
+                                                    "parent": "Insurance"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Real Estate",
+                                    "parent": "US Government",
+                                    "children": [
+                                        {
+                                            "name": "Real Estate -- Discontinued effective 04/28/2006",
+                                            "parent": "Real Estate",
+                                            "children": [
+                                                {
+                                                    "name": "US Treasuries Bond",
+                                                    "parent": "Real Estate -- Discontinued effective 04/28/2006"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Real Estate Investment Trusts (REITs)",
+                                            "parent": "Real Estate",
+                                            "children": [
+                                                {
+                                                    "name": "US Treasuries Bond",
+                                                    "parent": "Real Estate Investment Trusts (REITs)"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Real Estate Management & Development",
+                                            "parent": "Real Estate",
+                                            "children": [
+                                                {
+                                                    "name": "US Treasuries Bond",
+                                                    "parent": "Real Estate Management & Development"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Industrials",
+                    "parent": "Counterparty",
+                    "children": [
+                        {
+                            "name": "Emirates",
+                            "parent": "Counterparty",
+                            "children": [
+                                {
+                                    "name": "Capital Goods",
+                                    "parent": "Emirates",
+                                    "children": [
+                                        {
+                                            "name": "Aerospace & Defense",
+                                            "parent": "Capital Goods",
+                                            "children": [
+                                                {
+                                                    "name": "UNITED ARAB EMIRATES BONDS",
+                                                    "parent": "Aerospace & Defense"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Building Products",
+                                            "parent": "Capital Goods",
+                                            "children": [
+                                                {
+                                                    "name": "UNITED ARAB EMIRATES BONDS",
+                                                    "parent": "Building Products"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Construction & Engineering",
+                                            "parent": "Capital Goods",
+                                            "children": [
+                                                {
+                                                    "name": "UNITED ARAB EMIRATES BONDS",
+                                                    "parent": "Construction & Engineering"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Electrical Equipment",
+                                            "parent": "Capital Goods",
+                                            "children": [
+                                                {
+                                                    "name": "UNITED ARAB EMIRATES BONDS",
+                                                    "parent": "Electrical Equipment"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Industrial Conglomerates",
+                                            "parent": "Capital Goods",
+                                            "children": [
+                                                {
+                                                    "name": "UNITED ARAB EMIRATES BONDS",
+                                                    "parent": "Industrial Conglomerates"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Machinery",
+                                            "parent": "Capital Goods",
+                                            "children": [
+                                                {
+                                                    "name": "UNITED ARAB EMIRATES BONDS",
+                                                    "parent": "Machinery"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Trading Companies & Distributors",
+                                            "parent": "Capital Goods",
+                                            "children": [
+                                                {
+                                                    "name": "UNITED ARAB EMIRATES BONDS",
+                                                    "parent": "Trading Companies & Distributors"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Commercial Services & Supplies",
+                                    "parent": "Emirates",
+                                    "children": [
+                                        {
+                                            "name": "Commercial Services & Supplies",
+                                            "parent": "Commercial Services & Supplies",
+                                            "children": [
+                                                {
+                                                    "name": "UNITED ARAB EMIRATES BONDS",
+                                                    "parent": "Commercial Services & Supplies"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Transportation",
+                                    "parent": "Emirates",
+                                    "children": [
+                                        {
+                                            "name": "Air Freight & Logistics",
+                                            "parent": "Transportation",
+                                            "children": [
+                                                {
+                                                    "name": "UNITED ARAB EMIRATES BONDS",
+                                                    "parent": "Air Freight & Logistics"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Airlines",
+                                            "parent": "Transportation",
+                                            "children": [
+                                                {
+                                                    "name": "UNITED ARAB EMIRATES BONDS",
+                                                    "parent": "Airlines"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Marine",
+                                            "parent": "Transportation",
+                                            "children": [
+                                                {
+                                                    "name": "UNITED ARAB EMIRATES BONDS",
+                                                    "parent": "Marine"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Road & Rail",
+                                            "parent": "Transportation",
+                                            "children": [
+                                                {
+                                                    "name": "UNITED ARAB EMIRATES BONDS",
+                                                    "parent": "Road & Rail"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Transportation Infrastructure",
+                                            "parent": "Transportation",
+                                            "children": [
+                                                {
+                                                    "name": "UNITED ARAB EMIRATES BONDS",
+                                                    "parent": "Transportation Infrastructure"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ];
+
+
+    // ************** Generate the tree diagram	 *****************
+    var margin = {top: 20, right: 120, bottom: 20, left: 120},
+            width = 1600 - margin.right - margin.left,
+            height = 500 - margin.top - margin.bottom;
+
+    var i = 0,
+            duration = 750,
+            root;
+
+    var tree = d3.layout.tree()
+            .size([height, width]);
+
+    var diagonal = d3.svg.diagonal()
+            .projection(function (d) {
+                return [d.y, d.x];
+            });
+
+    var svg = d3.select("body").append("svg")
+            .attr("width", width + margin.right + margin.left)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    root = treeData[0];
+    root.x0 = height / 2;
+    root.y0 = 0;
+
+    update(root);
+    collapseAll();
+
+    d3.select(self.frameElement).style("height", "500px");
+
+    function update(source) {
+
+        // Compute the new tree layout.
+        var nodes = tree.nodes(root).reverse(),
+                links = tree.links(nodes);
+
+        // Normalize for fixed-depth.
+        nodes.forEach(function (d) {
+            d.y = d.depth * 180;
+        });
+
+        // Update the nodes…
+        var node = svg.selectAll("g.node")
+                .data(nodes, function (d) {
+                    return d.id || (d.id = ++i);
+                });
+
+        // Enter any new nodes at the parent's previous position.
+        var nodeEnter = node.enter().append("g")
+                .attr("class", "node")
+                .attr("transform", function (d) {
+                    return "translate(" + source.y0 + "," + source.x0 + ")";
+                })
+                .on("click", click);
+
+        nodeEnter.append("circle")
+                .attr("r", 1e-6)
+                .style("fill", function (d) {
+                    return d._children ? "lightsteelblue" : "#fff";
+                });
+
+        nodeEnter.append("text")
+                .attr("x", function (d) {
+                    return d.children || d._children ? -13 : 13;
+                })
+                .attr("dy", ".35em")
+                .attr("text-anchor", function (d) {
+                    return d.children || d._children ? "end" : "start";
+                })
+                .text(function (d) {
+                    return d.name;
+                })
+                .style("fill-opacity", 1e-6);
+
+        // Transition nodes to their new position.
+        var nodeUpdate = node.transition()
+                .duration(duration)
+                .attr("transform", function (d) {
+                    return "translate(" + d.y + "," + d.x + ")";
+                });
+
+        nodeUpdate.select("circle")
+                .attr("r", 10)
+                .style("fill", function (d) {
+                    return d._children ? "lightsteelblue" : "#fff";
+                });
+
+        nodeUpdate.select("text")
+                .style("fill-opacity", 1);
+
+        // Transition exiting nodes to the parent's new position.
+        var nodeExit = node.exit().transition()
+                .duration(duration)
+                .attr("transform", function (d) {
+                    return "translate(" + source.y + "," + source.x + ")";
+                })
+                .remove();
+
+        nodeExit.select("circle")
+                .attr("r", 1e-6);
+
+        nodeExit.select("text")
+                .style("fill-opacity", 1e-6);
+
+        // Update the links…
+        var link = svg.selectAll("path.link")
+                .data(links, function (d) {
+                    return d.target.id;
+                });
+
+        // Enter any new links at the parent's previous position.
+        link.enter().insert("path", "g")
+                .attr("class", "link")
+                .attr("d", function (d) {
+                    var o = {x: source.x0, y: source.y0};
+                    return diagonal({source: o, target: o});
+                });
+
+        // Transition links to their new position.
+        link.transition()
+                .duration(duration)
+                .attr("d", diagonal);
+
+        // Transition exiting nodes to the parent's new position.
+        link.exit().transition()
+                .duration(duration)
+                .attr("d", function (d) {
+                    var o = {x: source.x, y: source.y};
+                    return diagonal({source: o, target: o});
+                })
+                .remove();
+
+        // Stash the old positions for transition.
+        nodes.forEach(function (d) {
+            d.x0 = d.x;
+            d.y0 = d.y;
+        });
+    }
+
+    // Toggle children on click.
+    function click(d) {
+        if (d.children) {
+            d._children = d.children;
+            d.children = null;
+        } else {
+            d.children = d._children;
+            d._children = null;
+        }
+        update(d);
+    }
+
+
+    function expand(d) {
+        var children = (d.children) ? d.children : d._children;
+        if (d._children) {
+            d.children = d._children;
+            d._children = null;
+        }
+        if (children)
+            children.forEach(expand);
+    }
+
+    function expandAll() {
+        expand(root);
+        update(root);
+    }
+
+    function collapse(d) {
+        if (d.children) {
+            d._children = d.children;
+            d._children.forEach(collapse);
+            d.children = null;
+        }
+    }
+    function collapseAll() {
+        root.children.forEach(collapse);
+        collapse(root);
+        update(root);
+    }
+
+</script>
+
+</body>
+</html>

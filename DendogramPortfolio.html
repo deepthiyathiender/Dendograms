@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <style>
+
+        .node {
+            cursor: pointer;
+        }
+
+        .node circle {
+            fill: #fff;
+            stroke: steelblue;
+            stroke-width: 3px;
+        }
+
+        .node text {
+            font: 12px sans-serif;
+        }
+
+        .link {
+            fill: none;
+            stroke: #ccc;
+            stroke-width: 20px;
+            stroke-opacity: 0.5;
+        }
+
+        .tree_headers{
+            padding-left: 90px;
+        }
+
+
+        .fancy_button{
+            color: #000;
+            display: inline-block;
+            margin: 10px;
+            background: rgba(113, 196, 216, 0.5);
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            text-decoration: none;
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .fancy_button:hover {
+            background: rgba(198, 163, 205, 0.8);
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<table style="padding-left: 180px">
+    <tr>
+        <td class="tree_headers">
+            <h3>Region</h3>
+        </td>
+        <td class="tree_headers">
+            <h3>Country</h3>
+        </td>
+        <td class="tree_headers">
+            <h3>Portfolio</h3>
+        </td>
+        <td class="tree_headers">
+            <h3>Folder</h3>
+        </td>
+        <td class="tree_headers">
+            <input type="button" class="fancy_button" value="Expand All" onclick="expandAll()"/>
+        </td>
+        <td>
+            <input type="button" class="fancy_button" value="Collapse All" onclick="collapseAll()"/>
+        </td>
+    </tr>
+</table>
+
+<!-- load the d3.js library -->
+<script src="http://d3js.org/d3.v3.min.js"></script>
+
+<script>
+
+    var treeData = [
+        {
+            "name": "Region",
+            "parent": "null",
+            "children": [
+                {
+                    "name": "NORTH AMERICA",
+                    "parent": "Region",
+                    "children": [
+                        {
+                            "name": "United States of America",
+                            "parent": "NORTH AMERICA",
+                            "children": [
+                                {
+                                    "name": "ETD1",
+                                    "parent": "United States of America",
+                                    "children": [
+                                        {
+                                            "name": "EQUITY1",
+                                            "parent": "ETD1"
+                                        },
+                                        {
+                                            "name": "EQUITY11",
+                                            "parent": "ETD1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Sec_Fin_Tx1",
+                                    "parent": "United States of America",
+                                    "children": [
+                                        {
+                                            "name": "Fixed Income1",
+                                            "parent": "Sec_Fin_Tx1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Money Market1",
+                                    "parent": "United States of America",
+                                    "children": [
+                                        {
+                                            "name": "Money Market1",
+                                            "parent": "Money Market1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Lending1",
+                                    "parent": "United States of America",
+                                    "children": [
+                                        {
+                                            "name": "Money Market12",
+                                            "parent": "Lending1"
+                                        },
+                                        {
+                                            "name": "Lending1",
+                                            "parent": "Lending1"
+                                        },
+                                        {
+                                            "name": "Lending11",
+                                            "parent": "Lending1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "OTC1",
+                                    "parent": "United States of America",
+                                    "children": [
+                                        {
+                                            "name": "SWAPS1",
+                                            "parent": "OCT1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Lending OTC1",
+                                    "parent": "United States of America",
+                                    "children": [
+                                        {
+                                            "name": "Lending OTC1",
+                                            "parent":"Lending OTC1"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Canada",
+                            "parent": "NORTH AMERICA",
+                            "children": [
+                                {
+                                    "name": "ETD1",
+                                    "parent": "Canada",
+                                    "children": [
+                                        {
+                                            "name": "Equity2",
+                                            "parent": "ETD1"
+                                        },
+                                        {
+                                            "name": "Equity22",
+                                            "parent": "ETD1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Sec_Fin_Tx1",
+                                    "parent": "Canada",
+                                    "children": [
+                                        {
+                                            "name": "Fixed Income2",
+                                            "parent": "Sec_Fin_Tx1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Money Market2",
+                                    "parent": "Canada",
+                                    "children": [
+                                        {
+                                            "name": "Money Market2",
+                                            "parent": "Money Market2"
+                                        },
+                                        {
+                                            "name": "Money Market22",
+                                            "parent": "Money Market2"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+
+                {
+                    "name": "SOUTH AMERICA",
+                    "parent": "Region",
+                    "children": [
+                        {
+                            "name": "Brazil",
+                            "parent": "SOUTH AMERICA",
+                            "children": [
+                                {
+                                    "name": "Money Market3",
+                                    "parent": "Brazil",
+                                    "children": [
+                                        {
+                                            "name": "Money Market3",
+                                            "parent": "Money Market3"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Argentina",
+                            "parent": "SOUTH AMERICA",
+                            "children": [
+                                {
+                                    "name": "Money Market4",
+                                    "parent": "Argentina",
+                                    "children": [
+                                        {
+                                            "name": "Money Market4",
+                                            "parent": "Money Market4"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Mexico",
+                            "parent": "SOUTH AMERICA",
+                            "children": [
+                                {
+                                    "name": "Money Market5",
+                                    "parent": "Mexico",
+                                    "children": [
+                                        {
+                                            "name": "Money Market5",
+                                            "parent": "Money Market5"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "EUROPE",
+                    "parent": "Region",
+                    "children": [
+                        {
+                            "name": "Germany",
+                            "parent": "EUROPE",
+                            "children": [
+                                {
+                                    "name": "ETD3",
+                                    "parent": "Germany",
+                                    "children": [
+                                        {
+                                            "name": "Equity3",
+                                            "parent": "ETD3"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "OTC2",
+                                    "parent": "Germany",
+                                    "children": [
+                                        {
+                                            "name": "SWAPS2",
+                                            "parent": "OTC2",
+                                            "children": [
+                                                {
+                                                    "name": "Lending OTC2",
+                                                    "parent": "OTC2"
+                                                },
+                                                {
+                                                    "name": "Lending OTC22",
+                                                    "parent": "OTC2"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Lending OTC2",
+                                    "parent": "Germany"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "United Kingdom",
+                            "parent": "EUROPE",
+                            "children": [
+                                {
+                                    "name": "Sec_Fin_Tx3",
+                                    "parent": "United Kingdom",
+                                    "children": [
+                                        {
+                                            "name": "Fixed Income3",
+                                            "parent": "Sec_Fin_Tx3"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "ETD4",
+                                    "parent": "United Kingdom",
+                                    "children": [
+                                        {
+                                            "name": "Equity4",
+                                            "parent": "ETD4"
+                                        },
+                                        {
+                                            "name": "Equity44",
+                                            "parent": "ETD4"
+                                        }
+
+                                    ]
+                                },
+                                {
+                                    "name": "Money Market6",
+                                    "parent": "United Kingdom",
+                                    "children": [
+                                        {
+                                            "name": "Money Market6",
+                                            "parent": "Money Market6"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Lending2",
+                                    "parent": "United Kingdom",
+                                    "children": [
+                                        {
+                                            "name": "Lending2",
+                                            "parent": "Lending2"
+                                        },
+                                        {
+                                            "name": "Lending22",
+                                            "parent": "Lending2"
+                                        }
+
+                                    ]
+                                },
+                                {
+                                    "name": "Lending OTC3",
+                                    "parent": "United Kingdom",
+                                    "children": [
+                                        {
+                                            "name": "Rates3",
+                                            "parent": "Lending OTC3"
+                                        },
+                                        {
+                                            "name": "Rates33",
+                                            "parent": "Lending OTC3"
+                                        }
+
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "France",
+                            "parent": "EUROPE",
+                            "children": [
+                                {
+                                    "name": "OTC3",
+                                    "parent": "France"
+                                },
+                                {
+                                    "name": "ETD5",
+                                    "parent": "France",
+                                    "children": [
+                                        {
+                                            "name": "Equity5",
+                                            "parent": "ETD5"
+                                        },
+                                        {
+                                            "name": "Equity5",
+                                            "parent": "ETD5"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "ETD6",
+                                    "parent": "France",
+                                    "children": [
+                                        {
+                                            "name": "Equity6",
+                                            "parent": "ETD6"
+                                        },
+                                        {
+                                            "name": "Equity6",
+                                            "parent": "ETD6"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "MIDDLE EAST",
+                    "parent": "Region",
+                    "children": [
+                        {
+                            "name": "United Arab Emirates",
+                            "parent": "MIDDLE EAST",
+                            "children": [
+                                {
+                                    "name": "Sec_Fin_Tx4",
+                                    "parent": "United Arab Emirates",
+                                    "children": [
+                                        {
+                                            "name": "Fixed Income4",
+                                            "parent": "Sec_Fin_Tx4"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Lending3",
+                                    "parent": "United Arab Emirates",
+                                    "children": [
+                                        {
+                                            "name": "Lending3",
+                                            "parent": "Lending3"
+                                        },
+                                        {
+                                            "name": "Lending33",
+                                            "parent": "Lending3"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Lending OTC4",
+                                    "parent": "United Arab Emirates"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Egypt",
+                            "parent": "MIDDLE EAST",
+                            "children": [
+                                {
+                                    "name": "Money Market7",
+                                    "parent": "Egypt",
+                                    "children": [
+                                        {
+                                            "name": "Money Market7",
+                                            "parent": "Money Market7"
+                                        },
+                                        {
+                                            "name": "Money Market73",
+                                            "parent": "Money Market7"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Saudi Arabia",
+                            "parent": "MIDDLE EAST"
+                        }
+                    ]
+                },
+                {
+                    "name": "ASIA PACIFIC",
+                    "parent": "Region",
+                    "children": [
+                        {
+                            "name": "Singapore",
+                            "parent": "ASIA PACIFIC",
+                            "children": [
+                                {
+                                    "name": "Lending4",
+                                    "parent": "Singapore",
+                                    "children": [
+                                        {
+                                            "name": "Lending4",
+                                            "parent": "Lending4"
+                                        },
+                                        {
+                                            "name": "Lending4",
+                                            "parent": "Lending44"
+                                        }
+
+                                    ]
+                                },
+                                {
+                                    "name": "ETD9",
+                                    "parent": "Singapore",
+                                    "children": [
+                                        {
+                                            "name": "Equity9",
+                                            "parent": "ETD9"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Japan",
+                            "parent": "ASIA PACIFIC",
+                            "children": [
+                                {
+                                    "name": "ETD7",
+                                    "parent": "Japan",
+                                    "children": [
+                                        {
+                                            "name": "Equity7",
+                                            "parent": "ETD7"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "ETD8",
+                                    "parent": "Japan",
+                                    "children": [
+                                        {
+                                            "name": "Equity8",
+                                            "parent": "ETD8"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "OTC4",
+                                    "parent": "Japan",
+                                    "children": [
+                                        {
+                                            "name": "Rates4",
+                                            "parent": "OTC4"
+                                        },
+                                        {
+                                            "name": "Rates43",
+                                            "parent": "OTC4"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Money Market8",
+                                    "parent": "Japan",
+                                    "children": [
+                                        {
+                                            "name": "Money Market8",
+                                            "parent": "Money Market8"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "India",
+                            "parent": "ASIA PACIFIC",
+                            "children": [
+                                {
+                                    "name": "Sec_Fin_Tx5",
+                                    "parent": "India",
+                                    "children": [
+                                        {
+                                            "name": "Fixed Income5",
+                                            "parent": "Sec_Fin_Tx5"
+                                        },
+                                        {
+                                            "name": "Fixed Income55",
+                                            "parent": "Sec_Fin_Tx5"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Money Market9",
+                                    "parent": "India",
+                                    "children": [
+                                        {
+                                            "name": "Money Market9",
+                                            "parent": "Money Market9"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Malaysia",
+                            "parent": "ASIA PACIFIC"
+                        }
+                    ]
+                }
+            ]
+        }
+    ];
+
+
+    // ************** Generate the tree diagram	 *****************
+    var margin = {top: 20, right: 120, bottom: 20, left: 120},
+            width = 1600 - margin.right - margin.left,
+            height = 500 - margin.top - margin.bottom;
+
+    var i = 0,
+            duration = 750,
+            root;
+
+    var tree = d3.layout.tree()
+            .size([height, width]);
+
+    var diagonal = d3.svg.diagonal()
+            .projection(function (d) {
+                return [d.y, d.x];
+            });
+
+    var svg = d3.select("body").append("svg")
+            .attr("width", width + margin.right + margin.left)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    root = treeData[0];
+    root.x0 = height / 2;
+    root.y0 = 0;
+
+    update(root);
+    collapseAll();
+
+    d3.select(self.frameElement).style("height", "500px");
+
+    function update(source) {
+
+        // Compute the new tree layout.
+        var nodes = tree.nodes(root).reverse(),
+                links = tree.links(nodes);
+
+        // Normalize for fixed-depth.
+        nodes.forEach(function (d) {
+            d.y = d.depth * 180;
+        });
+
+        // Update the nodes…
+        var node = svg.selectAll("g.node")
+                .data(nodes, function (d) {
+                    return d.id || (d.id = ++i);
+                });
+
+        // Enter any new nodes at the parent's previous position.
+        var nodeEnter = node.enter().append("g")
+                .attr("class", "node")
+                .attr("transform", function (d) {
+                    return "translate(" + source.y0 + "," + source.x0 + ")";
+                })
+                .on("click", click);
+
+        nodeEnter.append("circle")
+                .attr("r", 1e-6)
+                .style("fill", function (d) {
+                    return d._children ? "lightsteelblue" : "#fff";
+                });
+
+        nodeEnter.append("text")
+                .attr("x", function (d) {
+                    return d.children || d._children ? -13 : 13;
+                })
+                .attr("dy", ".35em")
+                .attr("text-anchor", function (d) {
+                    return d.children || d._children ? "end" : "start";
+                })
+                .text(function (d) {
+                    return d.name;
+                })
+                .style("fill-opacity", 1e-6);
+
+        // Transition nodes to their new position.
+        var nodeUpdate = node.transition()
+                .duration(duration)
+                .attr("transform", function (d) {
+                    return "translate(" + d.y + "," + d.x + ")";
+                });
+
+        nodeUpdate.select("circle")
+                .attr("r", 10)
+                .style("fill", function (d) {
+                    return d._children ? "lightsteelblue" : "#fff";
+                });
+
+        nodeUpdate.select("text")
+                .style("fill-opacity", 1);
+
+        // Transition exiting nodes to the parent's new position.
+        var nodeExit = node.exit().transition()
+                .duration(duration)
+                .attr("transform", function (d) {
+                    return "translate(" + source.y + "," + source.x + ")";
+                })
+                .remove();
+
+        nodeExit.select("circle")
+                .attr("r", 1e-6);
+
+        nodeExit.select("text")
+                .style("fill-opacity", 1e-6);
+
+        // Update the links…
+        var link = svg.selectAll("path.link")
+                .data(links, function (d) {
+                    return d.target.id;
+                });
+
+        // Enter any new links at the parent's previous position.
+        link.enter().insert("path", "g")
+                .attr("class", "link")
+                .attr("d", function (d) {
+                    var o = {x: source.x0, y: source.y0};
+                    return diagonal({source: o, target: o});
+                });
+
+        // Transition links to their new position.
+        link.transition()
+                .duration(duration)
+                .attr("d", diagonal);
+
+        // Transition exiting nodes to the parent's new position.
+        link.exit().transition()
+                .duration(duration)
+                .attr("d", function (d) {
+                    var o = {x: source.x, y: source.y};
+                    return diagonal({source: o, target: o});
+                })
+                .remove();
+
+        // Stash the old positions for transition.
+        nodes.forEach(function (d) {
+            d.x0 = d.x;
+            d.y0 = d.y;
+        });
+    }
+
+    // Toggle children on click.
+    function click(d) {
+        if (d.children) {
+            d._children = d.children;
+            d.children = null;
+        } else {
+            d.children = d._children;
+            d._children = null;
+        }
+        update(d);
+    }
+
+
+    function expand(d){
+        var children = (d.children)?d.children:d._children;
+        if (d._children) {
+            d.children = d._children;
+            d._children = null;
+        }
+        if(children)
+            children.forEach(expand);
+    }
+
+    function expandAll(){
+        expand(root);
+        update(root);
+    }
+
+    function collapse(d) {
+        if (d.children) {
+            d._children = d.children;
+            d._children.forEach(collapse);
+            d.children = null;
+        }
+    }
+    function collapseAll(){
+        root.children.forEach(collapse);
+        collapse(root);
+        update(root);
+    }
+
+</script>
+
+</body>
+</html>
