@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <style>
+
+        .node {
+            cursor: pointer;
+        }
+
+        .node circle {
+            fill: #fff;
+            stroke: steelblue;
+            stroke-width: 3px;
+        }
+
+        .node text {
+            font: 12px sans-serif;
+        }
+
+        .link {
+            fill: none;
+            stroke: #ccc;
+            stroke-width: 10px;
+            stroke-opacity: 0.5;
+        }
+
+        .tree_headers {
+            padding-left: 90px;
+        }
+
+        .fancy_button {
+            color: #000;
+            display: inline-block;
+            margin: 10px;
+            background: rgba(113, 196, 216, 0.5);
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            text-decoration: none;
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .fancy_button:hover {
+            background: rgba(198, 163, 205, 0.8);
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<table style="padding-left: 730px">
+    <tr>
+        <td class="tree_headers">
+            <h3>Sector</h3>
+        </td>
+        <td class="tree_headers">
+            <h3>Industry</h3>
+        </td>
+        <td class="tree_headers">
+            <input type="button" class="fancy_button" value="Expand All" onclick="expandAll()"/>
+        </td>
+        <td>
+            <input type="button" class="fancy_button" value="Collapse All" onclick="collapseAll()"/>
+        </td>
+    </tr>
+</table>
+
+<!-- load the d3.js library -->
+<script src="https://d3js.org/d3.v3.min.js"></script>
+
+<script>
+
+    var treeData = [{
+
+        "name": "Parties",
+        "parent": "null",
+        "children": [
+
+            {
+                "name": "Issuer",
+                "parent": "Parties",
+                "children": [
+                    {
+                        "name": "Rating",
+                        "parent": "null",
+                        "children": [{
+                            "name": "AA",
+                            "parent": "Rating",
+                            "children": [
+                                {"name": "Reliance", "parent": "AA"}, {
+                                    "name": "J.P. Morgan Chase",
+                                    "parent": "AA"
+                                }, {"name": "Bank of America", "parent": "AA"}, {
+                                    "name": "Harrods Group",
+                                    "parent": "AA"
+                                }, {"name": "Barclays London", "parent": "AA"}
+                            ]
+                        },
+                            {
+                                "name": "BBB",
+                                "parent": "Rating",
+                                "children": [
+                                    {"name": "Government of China", "parent": "BBB"}, {
+                                        "name": "General Electric",
+                                        "parent": "BBB"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "BB",
+                                "parent": "Rating",
+                                "children": [
+                                    {"name": "General Motors", "parent": "BB"}, {
+                                        "name": "Bank of Montreal",
+                                        "parent": "BB"
+                                    }, {"name": "Goldman Sachs", "parent": "BB"}
+                                ]
+                            },
+                            {
+                                "name": "B",
+                                "parent": "Rating",
+                                "children": [
+                                    {"name": "Fairchild Group", "parent": "B"}, {"name": "RBI", "parent": "B"}
+                                ]
+                            },
+                            {
+                                "name": "AAA",
+                                "parent": "Rating",
+                                "children": [
+                                    {"name": "Reuters", "parent": "AAA"}, {
+                                        "name": "US Government",
+                                        "parent": "AAA"
+                                    }, {"name": "Emirates", "parent": "AAA"}, {"name": "Deutsche Bank", "parent": "AAA"}
+                                ]
+                            },
+                            {
+                                "name": "A",
+                                "parent": "Rating",
+                                "children": [
+                                    {"name": "Citi Bank", "parent": "A"}, {
+                                        "name": "�lectricit_ de France",
+                                        "parent": "A"
+                                    }, {"name": "Semex", "parent": "A"}
+                                ]
+                            },
+                            {
+
+                                "name": "CCC",
+                                "parent": "Rating",
+                                "children": [
+                                    {"name": "Copacol", "parent": "CCC"}
+                                ]
+                            },
+                            {
+                                "name": "C",
+                                "parent": "Rating",
+                                "children": [
+                                    {"name": "Aerol�neas Argentinas", "parent": "C"}
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Issuers",
+                        "parent": "Issuer",
+                        "children": [
+                            {"name":"Reliance","parent":"Issuers","children":[{"name":"Energy","parent":"Reliance","children":[{"name":"Energy","parent":"Energy"}]}]},{"name":"General Electric","parent":"Issuers","children":[{"name":"Energy","parent":"General Electric","children":[{"name":"Energy","parent":"Energy"}]}]},{"name":"Government of China","parent":"Issuers","children":[{"name":"SOVEREIGN","parent":"Government of China","children":[{"name":"SOVEREIGN","parent":"SOVEREIGN"}]}]},{"name":"US Government","parent":"Issuers","children":[{"name":"SOVEREIGN","parent":"US Government","children":[{"name":"SOVEREIGN","parent":"SOVEREIGN"}]}]},{"name":"General Motors","parent":"Issuers","children":[{"name":"Industrials","parent":"General Motors","children":[{"name":"Capital Goods","parent":"Industrials"}]}]},{"name":"Copacol","parent":"Issuers","children":[{"name":"Industrials","parent":"Copacol","children":[{"name":"Capital Goods","parent":"Industrials"}]}]},{"name":"Aerol�neas Argentinas","parent":"Issuers","children":[{"name":"Industrials","parent":"Aerol�neas Argentinas","children":[{"name":"Capital Goods","parent":"Industrials"}]}]},{"name":"Emirates","parent":"Issuers","children":[{"name":"Industrials","parent":"Emirates","children":[{"name":"Capital Goods","parent":"Industrials"}]}]},{"name":"Semex","parent":"Issuers","children":[{"name":"Industrials","parent":"Semex","children":[{"name":"Capital Goods","parent":"Industrials"}]}]},{"name":"Goldman Sachs","parent":"Issuers","children":[{"name":"Industrials","parent":"Goldman Sachs","children":[{"name":"Capital Goods","parent":"Industrials"}]}]},{"name":"RBI","parent":"Issuers","children":[{"name":"Industrials","parent":"RBI","children":[{"name":"Capital Goods","parent":"Industrials"}]}]},{"name":"Reuters","parent":"Issuers","children":[{"name":"Consumer Staples","parent":"Reuters","children":[{"name":"Food & Staples Retailing","parent":"Consumer Staples"}]}]},{"name":"�lectricit� de France","parent":"Issuers","children":[{"name":"Health Care","parent":"�lectricit� de France","children":[{"name":"Health Care Equipment & Services","parent":"Health Care"}]}]},{"name":"Fairchild Group","parent":"Issuers","children":[{"name":"Health Care","parent":"Fairchild Group","children":[{"name":"Health Care Equipment & Services","parent":"Health Care"}]}]},{"name":"Harrods Group","parent":"Issuers","children":[{"name":"Health Care","parent":"Harrods Group","children":[{"name":"Health Care Equipment & Services","parent":"Health Care"}]}]},{"name":"J.P. Morgan Chase","parent":"Issuers","children":[{"name":"Financials","parent":"J.P. Morgan Chase","children":[{"name":"Banks","parent":"Financials"}]}]},{"name":"Bank of America","parent":"Issuers","children":[{"name":"Financials","parent":"Bank of America","children":[{"name":"Banks","parent":"Financials"}]}]},{"name":"Citi Bank","parent":"Issuers","children":[{"name":"Financials","parent":"Citi Bank","children":[{"name":"Banks","parent":"Financials"}]}]},{"name":"Bank of Montreal","parent":"Issuers","children":[{"name":"Financials","parent":"Bank of Montreal","children":[{"name":"Banks","parent":"Financials"}]}]},{"name":"Deutsche Bank","parent":"Issuers","children":[{"name":"Financials","parent":"Deutsche Bank","children":[{"name":"Banks","parent":"Financials"}]}]},{"name":"Barclays London","parent":"Issuers","children":[{"name":"Financials","parent":"Barclays London","children":[{"name":"Banks","parent":"Financials"}]}]},{"name":"Default_cpty","parent":"Issuers","children":[{"name":"","parent":"Default_cpty","children":[{"name":"","parent":""}]}]},{"name":"","parent":"Issuers","children":[{"name":"","parent":"","children":[{"name":"","parent":""}]}]}
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Counterparty",
+                "parent": "Parties",
+                "children": [
+                    {
+                        "name": "Rating",
+                        "parent": "null",
+                        "children": [{
+                            "name": "AA",
+                            "parent": "Rating",
+                            "children": [
+                                {"name": "Reliance", "parent": "AA"}, {
+                                    "name": "Government of China",
+                                    "parent": "AA"
+                                }, {"name": "Hitachi", "parent": "AA"}, {
+                                    "name": "Loma Negra",
+                                    "parent": "AA"
+                                }, {"name": "Harrods Group", "parent": "AA"}, {
+                                    "name": "J.P. Morgan Chase",
+                                    "parent": "AA"
+                                }, {"name": "Bank of America", "parent": "AA"}, {
+                                    "name": "Barclays London",
+                                    "parent": "AA"
+                                }, {"name": "ING UK", "parent": "AA"}, {
+                                    "name": "Tata Consultancy Services ",
+                                    "parent": "AA"
+                                }
+                            ]
+                        },
+                            {
+                                "name": "BBB",
+                                "parent": "Rating",
+                                "children": [{"name": "General Electric", "parent": "BBB"}, {
+                                    "name": "Maruti",
+                                    "parent": "BBB"
+                                }, {"name": "Bank Central Asia", "parent": "BBB"}, {
+                                    "name": "Capgemini",
+                                    "parent": "BBB"
+                                }]
+                            },
+                            {
+                                "name": "BB",
+                                "parent": "Rating",
+                                "children": [
+                                    {"name": "Dubai Power", "parent": "BB"}, {
+                                        "name": "General Motors",
+                                        "parent": "BB"
+                                    }, {"name": "Calimax", "parent": "BB"}, {
+                                        "name": "Bank of Montreal",
+                                        "parent": "BB"
+                                    }, {"name": "National Bank of Commerce", "parent": "BB"}, {
+                                        "name": "Softzen",
+                                        "parent": "BB"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "B",
+                                "parent": "Rating",
+                                "children": [
+                                    {"name": "Saudi Arabia Petroliam", "parent": "B"}, {
+                                        "name": "Danfoss",
+                                        "parent": "B"
+                                    }, {"name": "Fairchild Group", "parent": "B"}
+                                ]
+                            },
+                            {
+                                "name": "AAA",
+                                "parent": "Rating",
+                                "children": [
+                                    {"name": "US Government", "parent": "AAA"}, {
+                                        "name": "Bosch",
+                                        "parent": "AAA"
+                                    }, {"name": "Emirates", "parent": "AAA"}, {
+                                        "name": "Reuters",
+                                        "parent": "AAA"
+                                    }, {"name": "Deutsche Bank", "parent": "AAA"}, {
+                                        "name": "First Bank of Gulf",
+                                        "parent": "AAA"
+                                    }, {"name": "Goldman Sachs", "parent": "AAA"}
+                                ]
+                            },
+                            {
+                                "name": "A",
+                                "parent": "Rating",
+                                "children": [
+                                    {"name": "Government of Japan", "parent": "A"}, {
+                                        "name": "Government of India",
+                                        "parent": "A"
+                                    }, {
+                                        "name": "Semex",
+                                        "parent": "A"
+                                    }, {
+                                        "name": "ABU QIR Fertilizers and Chemicals Industries Company",
+                                        "parent": "A"
+                                    }, {"name": "�lectricit� de France", "parent": "A"}, {
+                                        "name": "Citi Bank",
+                                        "parent": "A"
+                                    }, {"name": "Addittion Elle", "parent": "A"}
+                                ]
+                            },
+                            {
+
+                                "name": "CCC",
+                                "parent": "Rating",
+                                "children": [
+                                    {"name": "Copacol", "parent": "CCC"}, {"name": "Vita", "parent": "CCC"}
+                                ]
+                            },
+                            {
+                                "name": "C",
+                                "parent": "Rating",
+                                "children": [
+                                    {"name": "Aerol�neas Argentinas", "parent": "C"}, {
+                                        "name": "Virgin Trains",
+                                        "parent": "C"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "CC",
+                                "parent": "Rating",
+                                "children": [
+                                    {"name": "Banco do Brasil", "parent": "CC"}
+                                ]
+                            },
+                            {
+                                "name": "D",
+                                "parent": "Rating",
+                                "children": [
+                                    {"name": "Magix", "parent": "D"}
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Counterparties",
+                        "parent": "Counterparty",
+                        "children": [
+                            {"name":"Reliance","parent":"Counterparties","children":[{"name":"Energy","parent":"Reliance","children":[{"name":"Energy","parent":"Energy"}]}]},{"name":"General Electric","parent":"Counterparties","children":[{"name":"Energy","parent":"General Electric","children":[{"name":"Energy","parent":"Energy"}]}]},{"name":"Dubai Power","parent":"Counterparties","children":[{"name":"Energy","parent":"Dubai Power","children":[{"name":"Energy","parent":"Energy"}]}]},{"name":"Saudi Arabia Petroliam","parent":"Counterparties","children":[{"name":"SOVEREIGN","parent":"Saudi Arabia Petroliam","children":[{"name":"SOVEREIGN","parent":"SOVEREIGN"}]}]},{"name":"US Government","parent":"Counterparties","children":[{"name":"SOVEREIGN","parent":"US Government","children":[{"name":"SOVEREIGN","parent":"SOVEREIGN"}]}]},{"name":"Government of Japan","parent":"Counterparties","children":[{"name":"SOVEREIGN","parent":"Government of Japan","children":[{"name":"SOVEREIGN","parent":"SOVEREIGN"}]}]},{"name":"Government of India","parent":"Counterparties","children":[{"name":"SOVEREIGN","parent":"Government of India","children":[{"name":"SOVEREIGN","parent":"SOVEREIGN"}]}]},{"name":"Government of China","parent":"Counterparties","children":[{"name":"SOVEREIGN","parent":"Government of China","children":[{"name":"SOVEREIGN","parent":"SOVEREIGN"}]}]},{"name":"Hitachi","parent":"Counterparties","children":[{"name":"Materials","parent":"Hitachi","children":[{"name":"Materials","parent":"Materials"}]}]},{"name":"General Motors","parent":"Counterparties","children":[{"name":"Industrials","parent":"General Motors","children":[{"name":"Capital Goods","parent":"Industrials"}]}]},{"name":"Copacol","parent":"Counterparties","children":[{"name":"Industrials","parent":"Copacol","children":[{"name":"Capital Goods","parent":"Industrials"}]}]},{"name":"Aerol�neas Argentinas","parent":"Counterparties","children":[{"name":"Industrials","parent":"Aerol�neas Argentinas","children":[{"name":"Capital Goods","parent":"Industrials"}]}]},{"name":"Loma Negra","parent":"Counterparties","children":[{"name":"Industrials","parent":"Loma Negra","children":[{"name":"Capital Goods","parent":"Industrials"}]}]},{"name":"Semex","parent":"Counterparties","children":[{"name":"Industrials","parent":"Semex","children":[{"name":"Capital Goods","parent":"Industrials"}]}]},{"name":"Calimax","parent":"Counterparties","children":[{"name":"Industrials","parent":"Calimax","children":[{"name":"Capital Goods","parent":"Industrials"}]}]},{"name":"Danfoss","parent":"Counterparties","children":[{"name":"Industrials","parent":"Danfoss","children":[{"name":"Capital Goods","parent":"Industrials"}]}]},{"name":"Bosch","parent":"Counterparties","children":[{"name":"Industrials","parent":"Bosch","children":[{"name":"Capital Goods","parent":"Industrials"}]}]},{"name":"Emirates","parent":"Counterparties","children":[{"name":"Industrials","parent":"Emirates","children":[{"name":"Capital Goods","parent":"Industrials"}]}]},{"name":"ABU QIR Fertilizers and Chemicals Industries Company","parent":"Counterparties","children":[{"name":"Industrials","parent":"ABU QIR Fertilizers and Chemicals Industries Company","children":[{"name":"Capital Goods","parent":"Industrials"}]}]},{"name":"Maruti","parent":"Counterparties","children":[{"name":"Industrials","parent":"Maruti","children":[{"name":"Capital Goods","parent":"Industrials"}]}]},{"name":"Reuters","parent":"Counterparties","children":[{"name":"Consumer Staples","parent":"Reuters","children":[{"name":"Transportation","parent":"Consumer Staples"}]}]},{"name":"Fairchild Group","parent":"Counterparties","children":[{"name":"Health Care","parent":"Fairchild Group","children":[{"name":"Health Care Equipment & Services","parent":"Health Care"}]}]},{"name":"Harrods Group","parent":"Counterparties","children":[{"name":"Health Care","parent":"Harrods Group","children":[{"name":"Health Care Equipment & Services","parent":"Health Care"}]}]},{"name":"�lectricit� de France","parent":"Counterparties","children":[{"name":"Health Care","parent":"�lectricit� de France","children":[{"name":"Health Care Equipment & Services","parent":"Health Care"}]}]},{"name":"J.P. Morgan Chase","parent":"Counterparties","children":[{"name":"Financials","parent":"J.P. Morgan Chase","children":[{"name":"Banks","parent":"Financials"}]}]},{"name":"Bank of America","parent":"Counterparties","children":[{"name":"Financials","parent":"Bank of America","children":[{"name":"Banks","parent":"Financials"}]}]},{"name":"Citi Bank","parent":"Counterparties","children":[{"name":"Financials","parent":"Citi Bank","children":[{"name":"Banks","parent":"Financials"}]}]},{"name":"Addittion Elle","parent":"Counterparties","children":[{"name":"Financials","parent":"Addittion Elle","children":[{"name":"Banks","parent":"Financials"}]}]},{"name":"Bank of Montreal","parent":"Counterparties","children":[{"name":"Financials","parent":"Bank of Montreal","children":[{"name":"Banks","parent":"Financials"}]}]},{"name":"Banco do Brasil","parent":"Counterparties","children":[{"name":"Financials","parent":"Banco do Brasil","children":[{"name":"Banks","parent":"Financials"}]}]},{"name":"Deutsche Bank","parent":"Counterparties","children":[{"name":"Financials","parent":"Deutsche Bank","children":[{"name":"Banks","parent":"Financials"}]}]},{"name":"Barclays London","parent":"Counterparties","children":[{"name":"Financials","parent":"Barclays London","children":[{"name":"Banks","parent":"Financials"}]}]},{"name":"ING UK","parent":"Counterparties","children":[{"name":"Financials","parent":"ING UK","children":[{"name":"Banks","parent":"Financials"}]}]},{"name":"First Bank of Gulf","parent":"Counterparties","children":[{"name":"Financials","parent":"First Bank of Gulf","children":[{"name":"Banks","parent":"Financials"}]}]},{"name":"National Bank of Commerce","parent":"Counterparties","children":[{"name":"Financials","parent":"National Bank of Commerce","children":[{"name":"Banks","parent":"Financials"}]}]},{"name":"Softzen","parent":"Counterparties","children":[{"name":"Financials","parent":"Softzen","children":[{"name":"Banks","parent":"Financials"}]}]},{"name":"Bank Central Asia","parent":"Counterparties","children":[{"name":"Financials","parent":"Bank Central Asia","children":[{"name":"Banks","parent":"Financials"}]}]},{"name":"Goldman Sachs","parent":"Counterparties","children":[{"name":"Financials","parent":"Goldman Sachs","children":[{"name":"Banks","parent":"Financials"}]}]},{"name":"Capgemini","parent":"Counterparties","children":[{"name":"Information Technology","parent":"Capgemini","children":[{"name":"Software & Services","parent":"Information Technology"}]}]},{"name":"Tata Consultancy Services ","parent":"Counterparties","children":[{"name":"Information Technology","parent":"Tata Consultancy Services ","children":[{"name":"Software & Services","parent":"Information Technology"}]}]},{"name":"Magix","parent":"Counterparties","children":[{"name":"Telecommunication Services","parent":"Magix","children":[{"name":"Telecommunication Services","parent":"Telecommunication Services"}]}]},{"name":"Vita","parent":"Counterparties","children":[{"name":"Telecommunication Services","parent":"Vita","children":[{"name":"Telecommunication Services","parent":"Telecommunication Services"}]}]},{"name":"Virgin Trains","parent":"Counterparties","children":[{"name":"Telecommunication Services","parent":"Virgin Trains","children":[{"name":"Telecommunication Services","parent":"Telecommunication Services"}]}]},{"name":"Default_Cpty","parent":"Counterparties","children":[{"name":"","parent":"Default_Cpty","children":[{"name":"","parent":""}]}]}
+                        ]
+                    }
+                ]
+            }
+        ]
+    }];
+
+
+    // ************** Generate the tree diagram	 *****************
+    var margin = {top: 20, right: 120, bottom: 20, left: 120},
+            width = 1600 - margin.right - margin.left,
+            height = 500 - margin.top - margin.bottom;
+
+    var i = 0,
+            duration = 750,
+            root;
+
+    var tree = d3.layout.tree()
+            .size([height, width]);
+
+    var diagonal = d3.svg.diagonal()
+            .projection(function (d) {
+                return [d.y, d.x];
+            });
+
+    var svg = d3.select("body").append("svg")
+            .attr("width", width + margin.right + margin.left)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    root = treeData[0];
+    root.x0 = height / 2;
+    root.y0 = 0;
+
+    update(root);
+    collapseAll();
+
+    d3.select(self.frameElement).style("height", "500px");
+
+    function update(source) {
+
+        // Compute the new tree layout.
+        var nodes = tree.nodes(root).reverse(),
+                links = tree.links(nodes);
+
+        // Normalize for fixed-depth.
+        nodes.forEach(function (d) {
+            d.y = d.depth * 180;
+        });
+
+        // Update the nodes…
+        var node = svg.selectAll("g.node")
+                .data(nodes, function (d) {
+                    return d.id || (d.id = ++i);
+                });
+
+        // Enter any new nodes at the parent's previous position.
+        var nodeEnter = node.enter().append("g")
+                .attr("class", "node")
+                .attr("transform", function (d) {
+                    return "translate(" + source.y0 + "," + source.x0 + ")";
+                })
+                .on("click", click);
+
+        nodeEnter.append("circle")
+                .attr("r", 1e-6)
+                .style("fill", function (d) {
+                    return d._children ? "lightsteelblue" : "#fff";
+                });
+
+        nodeEnter.append("text")
+                .attr("x", function (d) {
+                    return d.children || d._children ? -13 : 13;
+                })
+                .attr("dy", ".35em")
+                .attr("text-anchor", function (d) {
+                    return d.children || d._children ? "end" : "start";
+                })
+                .text(function (d) {
+                    return d.name;
+                })
+                .style("fill-opacity", 1e-6);
+
+        // Transition nodes to their new position.
+        var nodeUpdate = node.transition()
+                .duration(duration)
+                .attr("transform", function (d) {
+                    return "translate(" + d.y + "," + d.x + ")";
+                });
+
+        nodeUpdate.select("circle")
+                .attr("r", 10)
+                .style("fill", function (d) {
+                    return d._children ? "lightsteelblue" : "#fff";
+                });
+
+        nodeUpdate.select("text")
+                .style("fill-opacity", 1);
+
+        // Transition exiting nodes to the parent's new position.
+        var nodeExit = node.exit().transition()
+                .duration(duration)
+                .attr("transform", function (d) {
+                    return "translate(" + source.y + "," + source.x + ")";
+                })
+                .remove();
+
+        nodeExit.select("circle")
+                .attr("r", 1e-6);
+
+        nodeExit.select("text")
+                .style("fill-opacity", 1e-6);
+
+        // Update the links…
+        var link = svg.selectAll("path.link")
+                .data(links, function (d) {
+                    return d.target.id;
+                });
+
+        // Enter any new links at the parent's previous position.
+        link.enter().insert("path", "g")
+                .attr("class", "link")
+                .attr("d", function (d) {
+                    var o = {x: source.x0, y: source.y0};
+                    return diagonal({source: o, target: o});
+                });
+
+        // Transition links to their new position.
+        link.transition()
+                .duration(duration)
+                .attr("d", diagonal);
+
+        // Transition exiting nodes to the parent's new position.
+        link.exit().transition()
+                .duration(duration)
+                .attr("d", function (d) {
+                    var o = {x: source.x, y: source.y};
+                    return diagonal({source: o, target: o});
+                })
+                .remove();
+
+        // Stash the old positions for transition.
+        nodes.forEach(function (d) {
+            d.x0 = d.x;
+            d.y0 = d.y;
+        });
+    }
+
+    // Toggle children on click.
+    function click(d) {
+        if (d.children) {
+            d._children = d.children;
+            d.children = null;
+        } else {
+            d.children = d._children;
+            d._children = null;
+        }
+        update(d);
+    }
+
+
+    function expand(d) {
+        var children = (d.children) ? d.children : d._children;
+        if (d._children) {
+            d.children = d._children;
+            d._children = null;
+        }
+        if (children)
+            children.forEach(expand);
+    }
+
+    function expandAll() {
+        expand(root);
+        update(root);
+    }
+
+    function collapse(d) {
+        if (d.children) {
+            d._children = d.children;
+            d._children.forEach(collapse);
+            d.children = null;
+        }
+    }
+    function collapseAll() {
+        root.children.forEach(collapse);
+        collapse(root);
+        update(root);
+    }
+
+</script>
+
+</body>
+</html>
