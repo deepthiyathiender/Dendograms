@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+<script>
+    var map = {};
+    var ratingMap = {};
+    var cptyMap = {};
+
+    queue()
+            .defer(d3.csv, "https://raw.githubusercontent.com/deepthiyathiender/Dendograms/master/creditLimit.csv", function (data) {
+                if (!(data["Coverage-Counterparty"] in map)) {
+                    map[data["Coverage-Counterparty"]] = {
+                        name: data["Coverage-Counterparty"],
+                        rating: data.Rating,
+                        alloc: data.Allocation,
+                        "product-exp": []
+                    };
+
+                    map[data["Coverage-Counterparty"]]["product-exp"].push(data["Product Exposure"]);
+                }
+                else {
+                    map[data["Coverage-Counterparty"]]["product-exp"].push(data["Product Exposure"]);
+                }
+
+                if (!(data["Rating"] in ratingMap)) {
+
+                    ratingMap[data["Rating"]] = [];
+
+                    ratingMap[data["Rating"]].push(map[data["Coverage-Counterparty"]]);
+                    cptyMap[map[data["Coverage-Counterparty"]].name] = "";
+                }
+                else {
+                    if (!([data["Coverage-Counterparty"]][0] in cptyMap)) {
+                        ratingMap[data["Rating"]].push(map[data["Coverage-Counterparty"]]);
+                        cptyMap[map[data["Coverage-Counterparty"]].name] = "";
+                    }
+                }
+            })
+            .await(function () {
+                let children = [];
+
+                for(rating in ratingMap) {
+
+                    let cptys = [];
+
+                    for(cpty in ratingMap[rating]){
+
+
+                        let exps = [];
+
+                        for(exp in ratingMap[rating][cpty]["product-exp"]) {
+
+
+                            var newExp;
+                            switch(ratingMap[rating][cpty]["product-exp"][exp]) {
+                                case "PE_IRS":
+                                case "PE_IRS1":
+                                    newExp = "IRS Deals";
+                                    break;
+                                case "PE_BND":
+                                case "PE_BND1":
+                                    newExp = "Bonds";
+                                    break;
+                                case "PE_EQU":
+                                case "PE_EQU1":
+                                    newExp = "Equities";
+                                    break;
+                                case "PE_FXS":
+                                case "PE_FXS1":
+                                    newExp = "FX Swaps";
+                                    break;
+                                case "PE_FXO":
+                                case "PE_FXO1":
+                                    newExp = "Fx OTC Deals";
+                                    break;
+                                case "PE_LD":
+                                case "PE_LD1":
+                                    newExp = "L&D Deals";
+                                    break;
+                            }
+
+
+                            exps.push({
+                                "name": newExp,
+                                "parent": ratingMap[rating][cpty].name
+                            })
+                        }
+
+
+                        cptys.push({
+                            "name": ratingMap[rating][cpty].name,
+                            "parent": rating,
+                            "alloc": parseInt(ratingMap[rating][cpty].alloc.replace(/,/g,"").replace(/ /g,"")),
+                            "children":exps
+                        })
+                    }
+
+                    children.push({
+                        "name": rating,
+                        "parent": "Rating",
+                        "children": cptys
+                    })
+                }
+                debugger;
+            });
+</script>
+</body>
+</html>
