@@ -726,6 +726,12 @@
                 dataset = [{name: "Utilized", percent: (value/alloc*100).toFixed(2)}];
 
             }
+                    else if((value/alloc*100).toFixed(2) <0){
+                dataset = [{name: "Utilized", percent: (value/alloc*100).toFixed(2)*-1}, {
+                    name: "Not Utilized",
+                    percent: (100 - value / alloc * 100 *-1).toFixed(2)
+                }];
+            }
             else {
                 dataset = [{name: "Utilized", percent: (value / alloc * 100).toFixed(2)}, {
                     name: "Not Utilized",
