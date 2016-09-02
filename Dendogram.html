@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <style>
+
+        .node {
+            cursor: pointer;
+        }
+
+        .node circle {
+            fill: #fff;
+            stroke: steelblue;
+            stroke-width: 3px;
+        }
+
+        .node text {
+            font: 12px sans-serif;
+        }
+
+        .link {
+            fill: none;
+            stroke: #ccc;
+            stroke-width: 10px;
+            stroke-opacity: 0.5;
+        }
+
+        .tree_headers {
+            padding-left: 90px;
+        }
+
+        .fancy_button {
+            color: #000;
+            display: inline-block;
+            margin: 10px;
+            background: rgba(113, 196, 216, 0.5);
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            text-decoration: none;
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .fancy_button:hover {
+            background: rgba(198, 163, 205, 0.8);
+
+        }
+
+        .widget {
+            margin: 0 auto;
+            width: 350px;
+            margin-top: 50px;
+            background-color: #222D3A;
+            border-radius: 5px;
+            box-shadow: 0px 0px 1px 0px #ffffff;
+
+        }
+
+        .header {
+            background-color: #ffffff;
+            height: 40px;
+            color: #000000;
+            text-align: center;
+            line-height: 40px;
+            border-top-left-radius: 7px;
+            border-top-right-radius: 7px;
+            font-weight: 400;
+            font-size: 1.5em;
+            text-shadow: 1px 1px #ffffff;
+        }
+
+        .chart-container {
+            padding: 25px;
+        }
+
+        .shadow {
+            -webkit-filter: drop-shadow(0px 3px 3px rgba(255, 255, 255, 0.5));
+            filter: drop-shadow(0px 3px 3px rgba(255, 255, 255, 0.5));
+        }
+
+
+        #pie{
+            background-color: white;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<table style="padding-left: 730px">
+    <tr>
+        <td class="tree_headers">
+            <h3>Sector</h3>
+        </td>
+        <td class="tree_headers">
+            <h3>Industry</h3>
+        </td>
+        <td class="tree_headers">
+            <input type="button" class="fancy_button" value="Expand All" onclick="expandAll()"/>
+        </td>
+        <td>
+            <input type="button" class="fancy_button" value="Collapse All" onclick="collapseAll()"/>
+        </td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <td id="tree">
+        </td>
+        <td style="vertical-align:top; padding-top: 300px">
+            <div class="widget">
+                <div class="header">Utilization Ratio</div>
+                <div id="pie" class="chart-container">
+
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<!-- load the d3.js library -->
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<script>
+
+    var BondMap = {};
+    var EquititesMap = {};
+    var FxOTCMap = {};
+    var FxSwapMap = {};
+    var IRSDealMap = {};
+    var LDDealMap = {};
+
+    function loadCSVs() {
+        queue()
+                .defer(d3.csv, "https://raw.githubusercontent.com/deepthiyathiender/Dendograms/master/mega_table_Bond.csv", function (data) {
+                    if (!(data["Counterparty"] in BondMap)) {
+                        BondMap[data["Counterparty"]] = {
+                            value: parseInt(data["Market Value (USD)"].replace(/,/g,""))
+                        };
+                    }
+                    else{
+
+                        var existingValue = BondMap[data["Counterparty"]].value;
+                        BondMap[data["Counterparty"]].value = parseInt(data["Market Value (USD)"].replace(/,/g,""))+existingValue;
+                    }
+                })
+                .defer(d3.csv, "https://raw.githubusercontent.com/deepthiyathiender/Dendograms/master/mega_table_Equities.csv", function (data) {
+                    if (!(data["Cpty"] in EquititesMap)) {
+                        EquititesMap[data["Cpty"]] = {
+                            value: parseInt(data["Market Value(USD)"].replace(/,/g,""))
+                        };
+                    }
+                    else{
+                        var existingValue = EquititesMap[data["Cpty"]].value;
+                        EquititesMap[data["Cpty"]].value = parseInt(data["Market Value(USD)"].replace(/,/g,""))+existingValue;
+                    }
+                })
+                .defer(d3.csv, "https://raw.githubusercontent.com/deepthiyathiender/Dendograms/master/mega_table_FxOTC.csv", function (data) {
+                    if (!(data["Counterparty"] in FxOTCMap)) {
+                        FxOTCMap[data["Counterparty"]] = {
+                            value: parseInt(data["Market Value (USD)"].replace(/,/g,""))
+                        };
+                    }
+                    else{
+                        var existingValue = FxOTCMap[data["Counterparty"]].value;
+                        FxOTCMap[data["Counterparty"]].value = parseInt(data["Market Value (USD)"].replace(/,/g,""))+existingValue;
+                    }
+                })
+                .defer(d3.csv, "https://raw.githubusercontent.com/deepthiyathiender/Dendograms/master/mega_table_FxSwap.csv", function (data) {
+                    if (!(data["Counterparty"] in FxSwapMap)) {
+                        FxSwapMap[data["Counterparty"]] = {
+                            value: parseInt(data["Market Value(USD)"].replace(/,/g,""))
+                        };
+                    }
+                    else{
+                        var existingValue = FxSwapMap[data["Counterparty"]].value;
+                        FxSwapMap[data["Counterparty"]].value = parseInt(data["Market Value(USD)"].replace(/,/g,""))+existingValue;
+                    }
+                })
+                .defer(d3.csv, "https://raw.githubusercontent.com/deepthiyathiender/Dendograms/master/mega_table_IRSDeal.csv", function (data) {
+                    if (!(data["Counterparty Paying"] in IRSDealMap)) {
+                        IRSDealMap[data["Counterparty Paying"]] = {
+                            value: parseInt(data["Market Value (USD)"].replace(/,/g,""))
+                        };
+                    }
+                    else{
+                        var existingValue = IRSDealMap[data["Counterparty Paying"]].value;
+                        IRSDealMap[data["Counterparty Paying"]].value = parseInt(data["Market Value (USD)"].replace(/,/g,""))+existingValue;
+                    }
+                })
+                .defer(d3.csv, "https://raw.githubusercontent.com/deepthiyathiender/Dendograms/master/mega_table_L&DDeal.csv", function (data) {
+                    if (!(data["Counterparty"] in LDDealMap)) {
+                        LDDealMap[data["Counterparty"]] = {
+                            value: parseInt(data["Market Value (USD)"].replace(/,/g,""))
+                        };
+                    }
+                    else{
+                        var existingValue = LDDealMap[data["Counterparty"]].value;
+                        LDDealMap[data["Counterparty"]].value = parseInt(data["Market Value (USD)"].replace(/,/g,""))+existingValue;
+                    }
+                })
+                .await(function () {
+                    debugger;
+                })
+    }
+</script>
+
+<script>
+    function drawPie(dataset) {
+
+        var pie = d3.layout.pie()
+                .value(function (d) {
+                    return d.percent
+                })
+                .sort(null)
+                .padAngle(.03);
+
+        var w = 300, h = 300;
+
+        var outerRadius = w / 2;
+        var innerRadius = 100;
+
+        //var color = d3.scale.category10();
+        color = d3.scale.ordinal()
+                .domain(0,1)
+                .range(["#ff0000", "#00ff00"]);
+
+        var arc = d3.svg.arc()
+                .outerRadius(outerRadius)
+                .innerRadius(innerRadius);
+
+        var svg = d3.select("#pie")
+                .append("svg")
+                .attr({
+                    width: w,
+                    height: h,
+                    class: 'shadow'
+                }).append('g')
+                .attr({
+                    transform: 'translate(' + w / 2 + ',' + h / 2 + ')'
+                });
+        var path = svg.selectAll('path')
+                .data(pie(dataset))
+                .enter()
+                .append('path')
+                .attr({
+                    d: arc,
+                    fill: function (d, i) {
+                        return color(d.data.name);
+                    }
+                });
+
+        path.transition()
+                .duration(1000)
+                .attrTween('d', function (d) {
+                    var interpolate = d3.interpolate({startAngle: 0, endAngle: 0}, d);
+                    return function (t) {
+                        return arc(interpolate(t));
+                    };
+                });
+
+
+        var restOfTheData = function () {
+            var text = svg.selectAll('text')
+                    .data(pie(dataset))
+                    .enter()
+                    .append("text")
+                    .transition()
+                    .duration(200)
+                    .attr("transform", function (d) {
+                        return "translate(" + arc.centroid(d) + ")";
+                    })
+                    .attr("dy", ".4em")
+                    .attr("text-anchor", "middle")
+                    .text(function (d) {
+                        return d.data.percent + "%";
+                    })
+                    .style({
+                        fill: '#000',
+                        'font-size': '20px'
+                    });
+
+            var legendRectSize = 20;
+            var legendSpacing = 7;
+            var legendHeight = legendRectSize + legendSpacing;
+
+
+            var legend = svg.selectAll('.legend')
+                    .data(color.domain())
+                    .enter()
+                    .append('g')
+                    .attr({
+                        class: 'legend',
+                        transform: function (d, i) {
+                            //Just a calculation for x & y position
+                            return 'translate(-35,' + ((i * legendHeight) - 65) + ')';
+                        }
+                    });
+            legend.append('rect')
+                    .attr({
+                        width: legendRectSize,
+                        height: legendRectSize,
+                        rx: 20,
+                        ry: 20
+                    })
+                    .style({
+                        fill: color,
+                        stroke: color
+                    });
+
+            legend.append('text')
+                    .attr({
+                        x: 30,
+                        y: 15
+                    })
+                    .text(function (d) {
+                        return d;
+                    }).style({
+                fill: '#929DAF',
+                'font-size': '14px'
+            });
+        };
+
+        setTimeout(restOfTheData, 1000);
+    }
+</script>
+
+<script>
+
+
+    loadCSVs();
+
+    // **************   PIE	 *****************
+    drawPie([]);
+
+    // ************** End of Pie	 *****************
+
+
+    var treeData = [
+        {
+
+            "name": "Rating",
+            "parent": "null",
+            "children": [
+                {
+                    "name": "C",
+                    "parent": "Rating",
+                    "children": [{
+                        "name": "Aerol�neas Argentinas",
+                        "parent": "C",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_LD", "parent": "Aerol�neas Argentinas"}, {
+                            "name": "PE_EQU1",
+                            "parent": "Aerol�neas Argentinas"
+                        }]
+                    }, {
+                        "name": "Virgin Trains",
+                        "parent": "C",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_IRS1", "parent": "Virgin Trains"}]
+                    }]
+                }, {
+                    "name": "AA",
+                    "parent": "Rating",
+                    "children": [{
+                        "name": "Bank of America",
+                        "parent": "AA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_FXO", "parent": "Bank of America"}, {
+                            "name": "PE_EQU",
+                            "parent": "Bank of America"
+                        }, {"name": "PE_FXS1", "parent": "Bank of America"}]
+                    }, {
+                        "name": "Barclays London",
+                        "parent": "AA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_LD", "parent": "Barclays London"}, {
+                            "name": "PE_BND",
+                            "parent": "Barclays London"
+                        }]
+                    }, {
+                        "name": "Government of China",
+                        "parent": "AA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_EQU", "parent": "Government of China"}]
+                    }, {
+                        "name": "ING UK",
+                        "parent": "AA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_FXS1", "parent": "ING UK"}]
+                    }, {
+                        "name": "J.P. Morgan Chase",
+                        "parent": "AA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_FXS", "parent": "J.P. Morgan Chase"}, {
+                            "name": "PE_EQU",
+                            "parent": "J.P. Morgan Chase"
+                        }]
+                    }, {
+                        "name": "Reliance",
+                        "parent": "AA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_LD", "parent": "Reliance"}]
+                    }]
+                }, {
+                    "name": "BB",
+                    "parent": "Rating",
+                    "children": [{
+                        "name": "Calimax",
+                        "parent": "BB",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_FXO1", "parent": "Calimax"}]
+                    }, {
+                        "name": "General Motors",
+                        "parent": "BB",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_EQU", "parent": "General Motors"}, {
+                            "name": "PE_EQU1",
+                            "parent": "General Motors"
+                        }]
+                    }]
+                }, {
+                    "name": "BBB",
+                    "parent": "Rating",
+                    "children": [{
+                        "name": "Capgemini",
+                        "parent": "BBB",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_LD1", "parent": "Capgemini"}]
+                    }]
+                }, {
+                    "name": "A",
+                    "parent": "Rating",
+                    "children": [{
+                        "name": "Citi Bank",
+                        "parent": "A",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_IRS", "parent": "Citi Bank"}, {
+                            "name": "PE_BND",
+                            "parent": "Citi Bank"
+                        }, {"name": "PE_EQU", "parent": "Citi Bank"}]
+                    }, {
+                        "name": "�lectricit� de France",
+                        "parent": "A",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_EQU", "parent": "�lectricit� de France"}]
+                    }, {
+                        "name": "Government of India",
+                        "parent": "A",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_FXS", "parent": "Government of India"}, {
+                            "name": "PE_BND1",
+                            "parent": "Government of India"
+                        }]
+                    }, {
+                        "name": "Semex",
+                        "parent": "A",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_FXS1", "parent": "Semex"}]
+                    }]
+                }, {
+                    "name": "CCC",
+                    "parent": "Rating",
+                    "children": [{
+                        "name": "Copacol",
+                        "parent": "CCC",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_EQU1", "parent": "Copacol"}]
+                    }, {
+                        "name": "Vita",
+                        "parent": "CCC",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_FXO1", "parent": "Vita"}]
+                    }]
+                }, {
+                    "name": "B",
+                    "parent": "Rating",
+                    "children": [{
+                        "name": "Danfoss",
+                        "parent": "B",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_IRS1", "parent": "Danfoss"}]
+                    }, {
+                        "name": "Fairchild Group",
+                        "parent": "B",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_IRS", "parent": "Fairchild Group"}, {
+                            "name": "PE_EQU1",
+                            "parent": "Fairchild Group"
+                        }]
+                    }]
+                }, {
+                    "name": "AAA",
+                    "parent": "Rating",
+                    "children": [{
+                        "name": "Emirates",
+                        "parent": "AAA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_FXO", "parent": "Emirates"}, {
+                            "name": "PE_BND1",
+                            "parent": "Emirates"
+                        }]
+                    }, {
+                        "name": "Goldman Sachs",
+                        "parent": "AAA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_EQU", "parent": "Goldman Sachs"}]
+                    }, {
+                        "name": "Reuters",
+                        "parent": "AAA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_EQU", "parent": "Reuters"}]
+                    }, {
+                        "name": "US Government",
+                        "parent": "AAA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_BND", "parent": "US Government"}, {
+                            "name": "PE_EQU",
+                            "parent": "US Government"
+                        }]
+                    }]
+                }, {
+                    "name": "D",
+                    "parent": "Rating",
+                    "children": [{
+                        "name": "Magix",
+                        "parent": "D",
+                        "alloc": 1000000000,
+                        "children": [{"name": "PE_LD1", "parent": "Magix"}]
+                    }]
+                }
+            ]
+        }
+    ];
+
+
+    // ************** Generate the tree diagram	 *****************
+    var margin = {top: 20, right: 120, bottom: 20, left: 120},
+            width = 1000 - margin.right - margin.left,
+            height = 1000 - margin.top - margin.bottom;
+
+    var i = 0,
+            duration = 750,
+            root;
+
+    var tree = d3.layout.tree()
+            .size([height, width]);
+
+    var diagonal = d3.svg.diagonal()
+            .projection(function (d) {
+                return [d.y, d.x];
+            });
+
+    var svg = d3.select("#tree").append("svg")
+            .attr("width", width)
+            .attr("height", 2000)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    root = treeData[0];
+    root.x0 = height / 2;
+    root.y0 = 0;
+
+    update(root);
+    collapseAll();
+
+    d3.select(self.frameElement).style("height", "500px");
+
+    function update(source) {
+
+        // Compute the new tree layout.
+        var nodes = tree.nodes(root).reverse(),
+                links = tree.links(nodes);
+
+        // Normalize for fixed-depth.
+        nodes.forEach(function (d) {
+            d.y = d.depth * 180;
+        });
+
+        // Update the nodes…
+        var node = svg.selectAll("g.node")
+                .data(nodes, function (d) {
+                    return d.id || (d.id = ++i);
+                });
+
+        // Enter any new nodes at the parent's previous position.
+        var nodeEnter = node.enter().append("g")
+                .attr("class", "node")
+                .attr("transform", function (d) {
+                    return "translate(" + source.y0 + "," + source.x0 + ")";
+                })
+                .on("click", click);
+
+        nodeEnter.append("circle")
+                .attr("r", 1e-6)
+                .style("fill", function (d) {
+                    return d._children ? "lightsteelblue" : "#fff";
+                });
+
+        nodeEnter.append("text")
+                .attr("x", function (d) {
+                    return d.children || d._children ? -13 : 13;
+                })
+                .attr("dy", ".35em")
+                .attr("text-anchor", function (d) {
+                    return d.children || d._children ? "end" : "start";
+                })
+                .text(function (d) {
+                    return d.name;
+                })
+                .style("fill-opacity", 1e-6);
+
+        // Transition nodes to their new position.
+        var nodeUpdate = node.transition()
+                .duration(duration)
+                .attr("transform", function (d) {
+                    return "translate(" + d.y + "," + d.x + ")";
+                });
+
+        nodeUpdate.select("circle")
+                .attr("r", 10)
+                .style("fill", function (d) {
+                    return d._children ? "lightsteelblue" : "#fff";
+                });
+
+        nodeUpdate.select("text")
+                .style("fill-opacity", 1);
+
+        // Transition exiting nodes to the parent's new position.
+        var nodeExit = node.exit().transition()
+                .duration(duration)
+                .attr("transform", function (d) {
+                    return "translate(" + source.y + "," + source.x + ")";
+                })
+                .remove();
+
+        nodeExit.select("circle")
+                .attr("r", 1e-6);
+
+        nodeExit.select("text")
+                .style("fill-opacity", 1e-6);
+
+        // Update the links…
+        var link = svg.selectAll("path.link")
+                .data(links, function (d) {
+                    return d.target.id;
+                });
+
+        // Enter any new links at the parent's previous position.
+        link.enter().insert("path", "g")
+                .attr("class", "link")
+                .attr("d", function (d) {
+                    var o = {x: source.x0, y: source.y0};
+                    return diagonal({source: o, target: o});
+                });
+
+        // Transition links to their new position.
+        link.transition()
+                .duration(duration)
+                .attr("d", diagonal);
+
+        // Transition exiting nodes to the parent's new position.
+        link.exit().transition()
+                .duration(duration)
+                .attr("d", function (d) {
+                    var o = {x: source.x, y: source.y};
+                    return diagonal({source: o, target: o});
+                })
+                .remove();
+
+        // Stash the old positions for transition.
+        nodes.forEach(function (d) {
+            d.x0 = d.x;
+            d.y0 = d.y;
+        });
+    }
+
+    // Toggle children on click.
+    function click(d) {
+
+        debugger;
+        if (d.depth == 3) {
+            d3.select("#pie svg").remove();
+
+            var value;
+            var alloc = d.parent.alloc;
+
+            switch(d.name){
+                case "PE_IRS":
+                case "PE_IRS1":
+                    value = IRSDealMap[d.parent.name].value;
+                    break;
+                case "PE_BND":
+                case "PE_BND1":
+                    value = BondMap[d.parent.name].value;
+                    break;
+                case "PE_EQU":
+                case "PE_EQU1":
+                    value = EquititesMap[d.parent.name].value;
+                    break;
+                case "PE_FXS":
+                case "PE_FXS1":
+                    value = FxSwapMap[d.parent.name].value;
+                    break;
+
+                case "PE_FXO":
+                case "PE_FXO1":
+                    value = FxOTCMap[d.parent.name].value;
+                    break;
+                case "PE_LD":
+                case "PE_LD1":
+                    value = LDDealMap[d.parent.name].value;
+                    break;
+            }
+
+            debugger;
+            var dataset;
+
+            if((value/alloc*100).toFixed(2) > 100){
+                dataset = [{name: "Utilized", percent: (value/alloc*100).toFixed(2)}];
+
+            }
+            else {
+                dataset = [{name: "Utilized", percent: (value / alloc * 100).toFixed(2)}, {
+                    name: "Not Utilized",
+                    percent: (100 - value / alloc * 100).toFixed(2)
+                }];
+            }
+
+            drawPie(dataset);
+        }
+        if (d.children) {
+            d._children = d.children;
+            d.children = null;
+        } else {
+            d.children = d._children;
+            d._children = null;
+        }
+        update(d);
+    }
+
+
+    function expand(d) {
+        var children = (d.children) ? d.children : d._children;
+        if (d._children) {
+            d.children = d._children;
+            d._children = null;
+        }
+        if (children)
+            children.forEach(expand);
+    }
+
+    function expandAll() {
+        expand(root);
+        update(root);
+    }
+
+    function collapse(d) {
+        if (d.children) {
+            d._children = d.children;
+            d._children.forEach(collapse);
+            d.children = null;
+        }
+    }
+    function collapseAll() {
+        root.children.forEach(collapse);
+        collapse(root);
+        update(root);
+    }
+
+</script>
+
+</body>
+</html>
