@@ -14,18 +14,6 @@
             stroke-width: 3px;
         }
 
-        .notActiveNode {
-            fill: #fff;
-            stroke: steelblue;
-            stroke-width: 3px;
-        }
-
-        .activeNode {
-            fill: #00ff00;
-            stroke: steelblue;
-            stroke-width: 3px;
-        }
-
         .node text {
             font: 12px sans-serif;
         }
@@ -38,7 +26,7 @@
         }
 
         .tree_headers {
-            padding-left: 90px;
+            padding-left: 30px;
         }
 
         .fancy_button {
@@ -61,12 +49,10 @@
 
         .widget {
             margin: 0 auto;
-            width: 350px;
+            width: 400px;
             margin-top: 50px;
-            background-color: #222D3A;
             border-radius: 5px;
             box-shadow: 0px 0px 1px 0px #ffffff;
-
         }
 
         .header {
@@ -80,6 +66,8 @@
             font-weight: 400;
             font-size: 1.5em;
             text-shadow: 1px 1px #ffffff;
+            margin-bottom: 50px;
+            margin-left: 150px;
         }
 
         .chart-container {
@@ -91,8 +79,7 @@
             filter: drop-shadow(0px 3px 3px rgba(255, 255, 255, 0.5));
         }
 
-
-        #pie{
+        #pie {
             background-color: white;
         }
 
@@ -102,13 +89,13 @@
 
 <body>
 
-<table style="padding-left: 730px">
+<table style="padding-left: 430px">
     <tr>
         <td class="tree_headers">
-            <h3>Sector</h3>
+            <h3>Counterparty</h3>
         </td>
         <td class="tree_headers">
-            <h3>Industry</h3>
+            <h3>Instruments</h3>
         </td>
         <td class="tree_headers">
             <input type="button" class="fancy_button" value="Expand All" onclick="expandAll()"/>
@@ -125,7 +112,7 @@
         </td>
         <td style="vertical-align:top; padding-top: 300px">
             <div class="widget">
-                <div class="header">Utilization Ratio</div>
+                <div id="header" class="header">Utilization Ratio</div>
                 <div id="pie" class="chart-container">
 
                 </div>
@@ -154,68 +141,68 @@
                 .defer(d3.csv, "https://raw.githubusercontent.com/deepthiyathiender/Dendograms/master/mega_table_Bond.csv", function (data) {
                     if (!(data["Counterparty"] in BondMap)) {
                         BondMap[data["Counterparty"]] = {
-                            value: parseInt(data["Market Value (USD)"].replace(/,/g,""))
+                            value: parseInt(data["Market Value (USD)"].replace(/,/g, ""))
                         };
                     }
-                    else{
+                    else {
 
                         var existingValue = BondMap[data["Counterparty"]].value;
-                        BondMap[data["Counterparty"]].value = parseInt(data["Market Value (USD)"].replace(/,/g,""))+existingValue;
+                        BondMap[data["Counterparty"]].value = parseInt(data["Market Value (USD)"].replace(/,/g, "")) + existingValue;
                     }
                 })
                 .defer(d3.csv, "https://raw.githubusercontent.com/deepthiyathiender/Dendograms/master/mega_table_Equities.csv", function (data) {
                     if (!(data["Cpty"] in EquititesMap)) {
                         EquititesMap[data["Cpty"]] = {
-                            value: parseInt(data["Market Value(USD)"].replace(/,/g,""))
+                            value: parseInt(data["Market Value(USD)"].replace(/,/g, ""))
                         };
                     }
-                    else{
+                    else {
                         var existingValue = EquititesMap[data["Cpty"]].value;
-                        EquititesMap[data["Cpty"]].value = parseInt(data["Market Value(USD)"].replace(/,/g,""))+existingValue;
+                        EquititesMap[data["Cpty"]].value = parseInt(data["Market Value(USD)"].replace(/,/g, "")) + existingValue;
                     }
                 })
                 .defer(d3.csv, "https://raw.githubusercontent.com/deepthiyathiender/Dendograms/master/mega_table_FxOTC.csv", function (data) {
                     if (!(data["Counterparty"] in FxOTCMap)) {
                         FxOTCMap[data["Counterparty"]] = {
-                            value: parseInt(data["Market Value (USD)"].replace(/,/g,""))
+                            value: parseInt(data["Market Value (USD)"].replace(/,/g, ""))
                         };
                     }
-                    else{
+                    else {
                         var existingValue = FxOTCMap[data["Counterparty"]].value;
-                        FxOTCMap[data["Counterparty"]].value = parseInt(data["Market Value (USD)"].replace(/,/g,""))+existingValue;
+                        FxOTCMap[data["Counterparty"]].value = parseInt(data["Market Value (USD)"].replace(/,/g, "")) + existingValue;
                     }
                 })
                 .defer(d3.csv, "https://raw.githubusercontent.com/deepthiyathiender/Dendograms/master/mega_table_FxSwap.csv", function (data) {
                     if (!(data["Counterparty"] in FxSwapMap)) {
                         FxSwapMap[data["Counterparty"]] = {
-                            value: parseInt(data["Market Value(USD)"].replace(/,/g,""))
+                            value: parseInt(data["Market Value(USD)"].replace(/,/g, ""))
                         };
                     }
-                    else{
+                    else {
                         var existingValue = FxSwapMap[data["Counterparty"]].value;
-                        FxSwapMap[data["Counterparty"]].value = parseInt(data["Market Value(USD)"].replace(/,/g,""))+existingValue;
+                        FxSwapMap[data["Counterparty"]].value = parseInt(data["Market Value(USD)"].replace(/,/g, "")) + existingValue;
                     }
                 })
                 .defer(d3.csv, "https://raw.githubusercontent.com/deepthiyathiender/Dendograms/master/mega_table_IRSDeal.csv", function (data) {
                     if (!(data["Counterparty Paying"] in IRSDealMap)) {
                         IRSDealMap[data["Counterparty Paying"]] = {
-                            value: parseInt(data["Market Value (USD)"].replace(/,/g,""))
+                            value: parseInt(data["Market Value (USD)"].replace(/,/g, ""))
                         };
                     }
-                    else{
+                    else {
                         var existingValue = IRSDealMap[data["Counterparty Paying"]].value;
-                        IRSDealMap[data["Counterparty Paying"]].value = parseInt(data["Market Value (USD)"].replace(/,/g,""))+existingValue;
+                        IRSDealMap[data["Counterparty Paying"]].value = parseInt(data["Market Value (USD)"].replace(/,/g, "")) + existingValue;
                     }
                 })
                 .defer(d3.csv, "https://raw.githubusercontent.com/deepthiyathiender/Dendograms/master/mega_table_L&DDeal.csv", function (data) {
                     if (!(data["Counterparty"] in LDDealMap)) {
                         LDDealMap[data["Counterparty"]] = {
-                            value: parseInt(data["Market Value (USD)"].replace(/,/g,""))
+                            value: parseInt(data["Market Value (USD)"].replace(/,/g, ""))
                         };
                     }
-                    else{
+                    else {
                         var existingValue = LDDealMap[data["Counterparty"]].value;
-                        LDDealMap[data["Counterparty"]].value = parseInt(data["Market Value (USD)"].replace(/,/g,""))+existingValue;
+                        LDDealMap[data["Counterparty"]].value = parseInt(data["Market Value (USD)"].replace(/,/g, "")) + existingValue;
                     }
                 })
                 .defer(d3.csv, "https://raw.githubusercontent.com/deepthiyathiender/Dendograms/master/creditLimit.csv", function (data) {
@@ -255,8 +242,8 @@
 
         //var color = d3.scale.category10();
         color = d3.scale.ordinal()
-                .domain(0,1)
-                .range(["#ff0000", "#00ff00"]);
+                .domain(0, 1)
+                .range(["#cc0000", "#009900"]);
 
         var arc = d3.svg.arc()
                 .outerRadius(outerRadius)
@@ -265,12 +252,12 @@
         var svg = d3.select("#pie")
                 .append("svg")
                 .attr({
-                    width: w,
-                    height: h,
+                    width: 500,
+                    height: 400,
                     class: 'shadow'
                 }).append('g')
                 .attr({
-                    transform: 'translate(' + w / 2 + ',' + h / 2 + ')'
+                    transform: 'translate(' + 500 / 2 + ',' + 400 / 2 + ')'
                 });
         var path = svg.selectAll('path')
                 .data(pie(dataset))
@@ -301,7 +288,11 @@
                     .transition()
                     .duration(200)
                     .attr("transform", function (d) {
-                        return "translate(" + arc.centroid(d) + ")";
+                        debugger;
+
+                        var c = arc.centroid(d);
+                        return "translate(" + c[0] * 1.47 + "," + c[1] * 1.47 + ")";
+                        //return "translate(" + arc.centroid(d) + ")";
                     })
                     .attr("dy", ".4em")
                     .attr("text-anchor", "middle")
@@ -349,7 +340,7 @@
                     .text(function (d) {
                         return d;
                     }).style({
-                fill: '#929DAF',
+                fill: '#000',
                 'font-size': '14px'
             });
         };
@@ -375,7 +366,193 @@
             "name": "Rating",
             "parent": "null",
             "children": [
-                {"name":"A","parent":"Rating","children":[{"name":"Citi Bank","parent":"A","alloc":1000000000,"children":[{"name":"IRS Deals","parent":"Citi Bank"},{"name":"Bonds","parent":"Citi Bank"},{"name":"Equities","parent":"Citi Bank"}]},{"name":"Electricite de France","parent":"A","alloc":1000000000,"children":[{"name":"Equities","parent":"Electricite de France"}]},{"name":"Government of India","parent":"A","alloc":1000000000,"children":[{"name":"FX Swaps","parent":"Government of India"},{"name":"Bonds","parent":"Government of India"}]},{"name":"Semex","parent":"A","alloc":1000000000,"children":[{"name":"FX Swaps","parent":"Semex"}]}]},{"name":"AA","parent":"Rating","children":[{"name":"Bank of America","parent":"AA","alloc":1000000000,"children":[{"name":"Fx OTC Deals","parent":"Bank of America"},{"name":"Equities","parent":"Bank of America"},{"name":"FX Swaps","parent":"Bank of America"}]},{"name":"Barclays London","parent":"AA","alloc":1000000000,"children":[{"name":"L&D Deals","parent":"Barclays London"},{"name":"Bonds","parent":"Barclays London"}]},{"name":"Government of China","parent":"AA","alloc":1000000000,"children":[{"name":"Equities","parent":"Government of China"}]},{"name":"ING UK","parent":"AA","alloc":1000000000,"children":[{"name":"FX Swaps","parent":"ING UK"}]},{"name":"J.P. Morgan Chase","parent":"AA","alloc":1000000000,"children":[{"name":"FX Swaps","parent":"J.P. Morgan Chase"},{"name":"Equities","parent":"J.P. Morgan Chase"}]},{"name":"Reliance","parent":"AA","alloc":1000000000,"children":[{"name":"L&D Deals","parent":"Reliance"}]}]},{"name":"AAA","parent":"Rating","children":[{"name":"Emirates","parent":"AAA","alloc":1000000000,"children":[{"name":"Fx OTC Deals","parent":"Emirates"},{"name":"Bonds","parent":"Emirates"}]},{"name":"Goldman Sachs","parent":"AAA","alloc":1000000000,"children":[{"name":"Equities","parent":"Goldman Sachs"}]},{"name":"Reuters","parent":"AAA","alloc":1000000000,"children":[{"name":"Equities","parent":"Reuters"}]},{"name":"US Government","parent":"AAA","alloc":1000000000,"children":[{"name":"Bonds","parent":"US Government"},{"name":"Equities","parent":"US Government"}]}]},{"name":"B","parent":"Rating","children":[{"name":"Danfoss","parent":"B","alloc":1000000000,"children":[{"name":"IRS Deals","parent":"Danfoss"}]},{"name":"Fairchild Group","parent":"B","alloc":1000000000,"children":[{"name":"IRS Deals","parent":"Fairchild Group"},{"name":"Equities","parent":"Fairchild Group"}]}]},{"name":"BB","parent":"Rating","children":[{"name":"Calimax","parent":"BB","alloc":1000000000,"children":[{"name":"Fx OTC Deals","parent":"Calimax"}]},{"name":"General Motors","parent":"BB","alloc":1000000000,"children":[{"name":"Equities","parent":"General Motors"},{"name":"Equities","parent":"General Motors"}]}]},{"name":"BBB","parent":"Rating","children":[{"name":"Capgemini","parent":"BBB","alloc":1000000000,"children":[{"name":"L&D Deals","parent":"Capgemini"}]}]},{"name":"C","parent":"Rating","children":[{"name":"Aerol�neas Argentinas","parent":"C","alloc":1000000000,"children":[{"name":"L&D Deals","parent":"Aerol�neas Argentinas"},{"name":"Equities","parent":"Aerol�neas Argentinas"}]},{"name":"Virgin Trains","parent":"C","alloc":1000000000,"children":[{"name":"IRS Deals","parent":"Virgin Trains"}]}]},{"name":"CCC","parent":"Rating","children":[{"name":"Copacol","parent":"CCC","alloc":1000000000,"children":[{"name":"Equities","parent":"Copacol"}]},{"name":"Vita","parent":"CCC","alloc":1000000000,"children":[{"name":"Fx OTC Deals","parent":"Vita"}]}]},{"name":"D","parent":"Rating","children":[{"name":"Magix","parent":"D","alloc":1000000000,"children":[{"name":"L&D Deals","parent":"Magix"}]}]}
+                {
+                    "name": "A",
+                    "parent": "Rating",
+                    "children": [{
+                        "name": "Citi Bank",
+                        "parent": "A",
+                        "alloc": 1000000000,
+                        "children": [{"name": "IRS Deals", "parent": "Citi Bank"}, {
+                            "name": "Bonds",
+                            "parent": "Citi Bank"
+                        }, {"name": "Equities", "parent": "Citi Bank"}]
+                    }, {
+                        "name": "Electricite de France",
+                        "parent": "A",
+                        "alloc": 1000000000,
+                        "children": [{"name": "Equities", "parent": "Electricite de France"}]
+                    }, {
+                        "name": "Government of India",
+                        "parent": "A",
+                        "alloc": 1000000000,
+                        "children": [{"name": "FX Swaps", "parent": "Government of India"}, {
+                            "name": "Bonds",
+                            "parent": "Government of India"
+                        }]
+                    }, {
+                        "name": "Semex",
+                        "parent": "A",
+                        "alloc": 1000000000,
+                        "children": [{"name": "FX Swaps", "parent": "Semex"}]
+                    }]
+                }, {
+                    "name": "AA",
+                    "parent": "Rating",
+                    "children": [{
+                        "name": "Bank of America",
+                        "parent": "AA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "Fx OTC Deals", "parent": "Bank of America"}, {
+                            "name": "Equities",
+                            "parent": "Bank of America"
+                        }, {"name": "FX Swaps", "parent": "Bank of America"}]
+                    }, {
+                        "name": "Barclays London",
+                        "parent": "AA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "L&D Deals", "parent": "Barclays London"}, {
+                            "name": "Bonds",
+                            "parent": "Barclays London"
+                        }]
+                    }, {
+                        "name": "Government of China",
+                        "parent": "AA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "Equities", "parent": "Government of China"}]
+                    }, {
+                        "name": "ING UK",
+                        "parent": "AA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "FX Swaps", "parent": "ING UK"}]
+                    }, {
+                        "name": "J.P. Morgan Chase",
+                        "parent": "AA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "FX Swaps", "parent": "J.P. Morgan Chase"}, {
+                            "name": "Equities",
+                            "parent": "J.P. Morgan Chase"
+                        }]
+                    }, {
+                        "name": "Reliance",
+                        "parent": "AA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "L&D Deals", "parent": "Reliance"}]
+                    }]
+                }, {
+                    "name": "AAA",
+                    "parent": "Rating",
+                    "children": [{
+                        "name": "Emirates",
+                        "parent": "AAA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "Fx OTC Deals", "parent": "Emirates"}, {
+                            "name": "Bonds",
+                            "parent": "Emirates"
+                        }]
+                    }, {
+                        "name": "Goldman Sachs",
+                        "parent": "AAA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "Equities", "parent": "Goldman Sachs"}]
+                    }, {
+                        "name": "Reuters",
+                        "parent": "AAA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "Equities", "parent": "Reuters"}]
+                    }, {
+                        "name": "US Government",
+                        "parent": "AAA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "Bonds", "parent": "US Government"}, {
+                            "name": "Equities",
+                            "parent": "US Government"
+                        }]
+                    }]
+                }, {
+                    "name": "B",
+                    "parent": "Rating",
+                    "children": [{
+                        "name": "Danfoss",
+                        "parent": "B",
+                        "alloc": 1000000000,
+                        "children": [{"name": "IRS Deals", "parent": "Danfoss"}]
+                    }, {
+                        "name": "Fairchild Group",
+                        "parent": "B",
+                        "alloc": 1000000000,
+                        "children": [{"name": "IRS Deals", "parent": "Fairchild Group"}, {
+                            "name": "Equities",
+                            "parent": "Fairchild Group"
+                        }]
+                    }]
+                }, {
+                    "name": "BB",
+                    "parent": "Rating",
+                    "children": [{
+                        "name": "Calimax",
+                        "parent": "BB",
+                        "alloc": 1000000000,
+                        "children": [{"name": "Fx OTC Deals", "parent": "Calimax"}]
+                    }, {
+                        "name": "General Motors",
+                        "parent": "BB",
+                        "alloc": 1000000000,
+                        "children": [{"name": "Equities", "parent": "General Motors"}, {
+                            "name": "Equities",
+                            "parent": "General Motors"
+                        }]
+                    }]
+                }, {
+                    "name": "BBB",
+                    "parent": "Rating",
+                    "children": [{
+                        "name": "Capgemini",
+                        "parent": "BBB",
+                        "alloc": 1000000000,
+                        "children": [{"name": "L&D Deals", "parent": "Capgemini"}]
+                    }]
+                }, {
+                    "name": "C",
+                    "parent": "Rating",
+                    "children": [{
+                        "name": "Aerol�neas Argentinas",
+                        "parent": "C",
+                        "alloc": 1000000000,
+                        "children": [{"name": "L&D Deals", "parent": "Aerol�neas Argentinas"}, {
+                            "name": "Equities",
+                            "parent": "Aerol�neas Argentinas"
+                        }]
+                    }, {
+                        "name": "Virgin Trains",
+                        "parent": "C",
+                        "alloc": 1000000000,
+                        "children": [{"name": "IRS Deals", "parent": "Virgin Trains"}]
+                    }]
+                }, {
+                    "name": "CCC",
+                    "parent": "Rating",
+                    "children": [{
+                        "name": "Copacol",
+                        "parent": "CCC",
+                        "alloc": 1000000000,
+                        "children": [{"name": "Equities", "parent": "Copacol"}]
+                    }, {
+                        "name": "Vita",
+                        "parent": "CCC",
+                        "alloc": 1000000000,
+                        "children": [{"name": "Fx OTC Deals", "parent": "Vita"}]
+                    }]
+                }, {
+                    "name": "D",
+                    "parent": "Rating",
+                    "children": [{
+                        "name": "Magix",
+                        "parent": "D",
+                        "alloc": 1000000000,
+                        "children": [{"name": "L&D Deals", "parent": "Magix"}]
+                    }]
+                }
             ]
         }
     ];
@@ -441,10 +618,6 @@
         nodeEnter.append("circle")
                 .attr("r", 1e-6)
                 .style("fill", function (d) {
-                    debugger;
-                    if(source.highlight == true){
-                        return "#00ff00";
-                    }
                     return d._children ? "lightsteelblue" : "#fff";
                 });
 
@@ -536,7 +709,7 @@
             var value;
             var alloc = d.parent.alloc;
 
-            switch(d.name){
+            switch (d.name) {
                 case "IRS Deals":
                     value = IRSDealMap[d.parent.name].value;
                     break;
@@ -560,14 +733,14 @@
 
             var dataset;
 
-            if((value/alloc*100).toFixed(2) > 100){
-                dataset = [{name: "Utilized", percent: (value/alloc*100).toFixed(2)}];
+            if ((value / alloc * 100).toFixed(2) > 100) {
+                dataset = [{name: "Utilized", percent: (value / alloc * 100).toFixed(2)}];
 
             }
-                    else if((value/alloc*100).toFixed(2) <0){
-                dataset = [{name: "Utilized", percent: (value/alloc*100).toFixed(2)*-1}, {
+            else if ((value / alloc * 100).toFixed(2) < 0) {
+                dataset = [{name: "Utilized", percent: (value / alloc * 100).toFixed(2) * -1}, {
                     name: "Not Utilized",
-                    percent: (100 - value / alloc * 100 *-1).toFixed(2)
+                    percent: (100 - value / alloc * 100 * -1).toFixed(2)
                 }];
             }
             else {
@@ -577,6 +750,8 @@
                 }];
             }
 
+
+            document.getElementById("header").innerHTML = "<span>"+d.parent.name+"</span><br/><span>"+d.name+"</span>";
             drawPie(dataset);
         }
 
@@ -589,9 +764,9 @@
             let Avpercentage = 0;
             let Avlength = Counterparty["product-exp"].length;
 
-            for(let exp in Counterparty["product-exp"]){
+            for (let exp in Counterparty["product-exp"]) {
                 let Expvalue;
-                switch(Counterparty["product-exp"][exp]){
+                switch (Counterparty["product-exp"][exp]) {
                     case "PE_IRS":
                     case "PE_IRS1":
                         Expvalue = IRSDealMap[d.name].value;
@@ -619,21 +794,21 @@
                         break;
                 }
 
-                Avpercentage += parseFloat((Expvalue/d.alloc*100).toFixed(2));
+                Avpercentage += parseFloat((Expvalue / d.alloc * 100).toFixed(2));
             }
-            if(Avlength != 0) {
+            if (Avlength != 0) {
                 Avpercentage = parseFloat(Avpercentage / Avlength);
             }
 
             var Avdataset;
 
-            if(Avpercentage > 100){
+            if (Avpercentage > 100) {
                 Avdataset = [{name: "Average Utilization", percent: Avpercentage.toFixed(2)}];
             }
-            else if(Avpercentage <0){
+            else if (Avpercentage < 0) {
                 Avdataset = [{name: "Average Utilization", percent: Avpercentage.toFixed(2) * -1}, {
                     name: "Not Utilized",
-                    percent: (100 - Avpercentage *-1).toFixed(2)
+                    percent: (100 - Avpercentage * -1).toFixed(2)
                 }];
             }
             else {
@@ -643,6 +818,7 @@
                 }];
             }
 
+            document.getElementById("header").innerHTML = "<span>"+d.name+"</span>";
             drawPie(Avdataset);
 
 
