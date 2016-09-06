@@ -803,22 +803,22 @@
             var Avdataset;
 
             if (Avpercentage > 100) {
-                Avdataset = [{name: "Average Utilization", percent: Avpercentage.toFixed(2)}];
+                Avdataset = [{name: "Utilized", percent: Avpercentage.toFixed(2)}];
             }
             else if (Avpercentage < 0) {
-                Avdataset = [{name: "Average Utilization", percent: Avpercentage.toFixed(2) * -1}, {
+                Avdataset = [{name: "Utilized", percent: Avpercentage.toFixed(2) * -1}, {
                     name: "Not Utilized",
                     percent: (100 - Avpercentage * -1).toFixed(2)
                 }];
             }
             else {
-                Avdataset = [{name: "Average Utilization", percent: Avpercentage.toFixed(2)}, {
+                Avdataset = [{name: "Utilized", percent: Avpercentage.toFixed(2)}, {
                     name: "Not Utilized",
                     percent: (100 - Avpercentage).toFixed(2)
                 }];
             }
 
-            document.getElementById("header").innerHTML = "<span>"+d.name+"</span>";
+            document.getElementById("header").innerHTML = "<p>Average Utilization </p><span>"+d.name+"</span>";
             drawPie(Avdataset);
 
 
