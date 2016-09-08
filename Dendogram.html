@@ -369,36 +369,37 @@
             "parent": "null",
             "children": [
                 {
-                    "name": "A",
+                    "name": "AAA",
                     "parent": "Rating",
                     "children": [{
-                        "name": "Citi Bank",
-                        "parent": "A",
+                        "name": "Emirates",
+                        "parent": "AAA",
                         "alloc": 1000000000,
-                        "children": [{"name": "IRS Deals", "parent": "Citi Bank"}, {
+                        "children": [{"name": "Fx OTC Deals", "parent": "Emirates"}, {
                             "name": "Bonds",
-                            "parent": "Citi Bank"
-                        }, {"name": "Equities", "parent": "Citi Bank"}]
-                    }, {
-                        "name": "Electricite de France",
-                        "parent": "A",
-                        "alloc": 1000000000,
-                        "children": [{"name": "Equities", "parent": "Electricite de France"}]
-                    }, {
-                        "name": "Government of India",
-                        "parent": "A",
-                        "alloc": 1000000000,
-                        "children": [{"name": "FX Swaps", "parent": "Government of India"}, {
-                            "name": "Bonds",
-                            "parent": "Government of India"
+                            "parent": "Emirates"
                         }]
                     }, {
-                        "name": "Semex",
-                        "parent": "A",
+                        "name": "Goldman Sachs",
+                        "parent": "AAA",
                         "alloc": 1000000000,
-                        "children": [{"name": "FX Swaps", "parent": "Semex"}]
+                        "children": [{"name": "Equities", "parent": "Goldman Sachs"}]
+                    }, {
+                        "name": "Reuters",
+                        "parent": "AAA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "Equities", "parent": "Reuters"}]
+                    }, {
+                        "name": "US Government",
+                        "parent": "AAA",
+                        "alloc": 1000000000,
+                        "children": [{"name": "Bonds", "parent": "US Government"}, {
+                            "name": "Equities",
+                            "parent": "US Government"
+                        }]
                     }]
-                }, {
+                }
+                , {
                     "name": "AA",
                     "parent": "Rating",
                     "children": [{
@@ -441,37 +442,67 @@
                         "alloc": 1000000000,
                         "children": [{"name": "L&D Deals", "parent": "Reliance"}]
                     }]
-                }, {
-                    "name": "AAA",
+                },
+                {
+                    "name": "A",
                     "parent": "Rating",
                     "children": [{
-                        "name": "Emirates",
-                        "parent": "AAA",
+                        "name": "Citi Bank",
+                        "parent": "A",
                         "alloc": 1000000000,
-                        "children": [{"name": "Fx OTC Deals", "parent": "Emirates"}, {
+                        "children": [{"name": "IRS Deals", "parent": "Citi Bank"}, {
                             "name": "Bonds",
-                            "parent": "Emirates"
+                            "parent": "Citi Bank"
+                        }, {"name": "Equities", "parent": "Citi Bank"}]
+                    }, {
+                        "name": "Electricite de France",
+                        "parent": "A",
+                        "alloc": 1000000000,
+                        "children": [{"name": "Equities", "parent": "Electricite de France"}]
+                    }, {
+                        "name": "Government of India",
+                        "parent": "A",
+                        "alloc": 1000000000,
+                        "children": [{"name": "FX Swaps", "parent": "Government of India"}, {
+                            "name": "Bonds",
+                            "parent": "Government of India"
                         }]
                     }, {
-                        "name": "Goldman Sachs",
-                        "parent": "AAA",
+                        "name": "Semex",
+                        "parent": "A",
                         "alloc": 1000000000,
-                        "children": [{"name": "Equities", "parent": "Goldman Sachs"}]
-                    }, {
-                        "name": "Reuters",
-                        "parent": "AAA",
-                        "alloc": 1000000000,
-                        "children": [{"name": "Equities", "parent": "Reuters"}]
-                    }, {
-                        "name": "US Government",
-                        "parent": "AAA",
-                        "alloc": 1000000000,
-                        "children": [{"name": "Bonds", "parent": "US Government"}, {
-                            "name": "Equities",
-                            "parent": "US Government"
-                        }]
+                        "children": [{"name": "FX Swaps", "parent": "Semex"}]
                     }]
                 }, {
+                    "name": "BBB",
+                    "parent": "Rating",
+                    "children": [{
+                        "name": "Capgemini",
+                        "parent": "BBB",
+                        "alloc": 1000000000,
+                        "children": [{"name": "L&D Deals", "parent": "Capgemini"}]
+                    }]
+                }
+                ,
+                {
+                    "name": "BB",
+                    "parent": "Rating",
+                    "children": [{
+                        "name": "Calimax",
+                        "parent": "BB",
+                        "alloc": 1000000000,
+                        "children": [{"name": "Fx OTC Deals", "parent": "Calimax"}]
+                    }, {
+                        "name": "General Motors",
+                        "parent": "BB",
+                        "alloc": 1000000000,
+                        "children": [{"name": "Equities", "parent": "General Motors"}, {
+                            "name": "Equities",
+                            "parent": "General Motors"
+                        }]
+                    }]
+                },
+                {
                     "name": "B",
                     "parent": "Rating",
                     "children": [{
@@ -489,32 +520,21 @@
                         }]
                     }]
                 }, {
-                    "name": "BB",
+                    "name": "CCC",
                     "parent": "Rating",
                     "children": [{
-                        "name": "Calimax",
-                        "parent": "BB",
+                        "name": "Copacol",
+                        "parent": "CCC",
                         "alloc": 1000000000,
-                        "children": [{"name": "Fx OTC Deals", "parent": "Calimax"}]
+                        "children": [{"name": "Equities", "parent": "Copacol"}]
                     }, {
-                        "name": "General Motors",
-                        "parent": "BB",
+                        "name": "Vita",
+                        "parent": "CCC",
                         "alloc": 1000000000,
-                        "children": [{"name": "Equities", "parent": "General Motors"}, {
-                            "name": "Equities",
-                            "parent": "General Motors"
-                        }]
+                        "children": [{"name": "Fx OTC Deals", "parent": "Vita"}]
                     }]
-                }, {
-                    "name": "BBB",
-                    "parent": "Rating",
-                    "children": [{
-                        "name": "Capgemini",
-                        "parent": "BBB",
-                        "alloc": 1000000000,
-                        "children": [{"name": "L&D Deals", "parent": "Capgemini"}]
-                    }]
-                }, {
+                },
+                {
                     "name": "C",
                     "parent": "Rating",
                     "children": [{
@@ -530,20 +550,6 @@
                         "parent": "C",
                         "alloc": 1000000000,
                         "children": [{"name": "IRS Deals", "parent": "Virgin Trains"}]
-                    }]
-                }, {
-                    "name": "CCC",
-                    "parent": "Rating",
-                    "children": [{
-                        "name": "Copacol",
-                        "parent": "CCC",
-                        "alloc": 1000000000,
-                        "children": [{"name": "Equities", "parent": "Copacol"}]
-                    }, {
-                        "name": "Vita",
-                        "parent": "CCC",
-                        "alloc": 1000000000,
-                        "children": [{"name": "Fx OTC Deals", "parent": "Vita"}]
                     }]
                 }, {
                     "name": "D",
@@ -753,11 +759,11 @@
             }
 
 
-            document.getElementById("header").innerHTML = "<span>"+d.parent.name+"</span><br/><span>"+d.name+"</span>";
+            document.getElementById("header").innerHTML = "<span>" + d.parent.name + "</span><br/><span>" + d.name + "</span>";
             drawPie(dataset);
         }
 
-        if (d.depth == 2) {
+        else if (d.depth == 2) {
             d3.select("#pie svg").remove();
 
 
@@ -820,11 +826,15 @@
                 }];
             }
 
-            document.getElementById("header").innerHTML = "<br/><span>"+d.name+"</span>";
-
+            document.getElementById("header").innerHTML = "<br/><span>" + d.name + "</span>";
             drawPie(Avdataset);
 
 
+        }
+        else
+        {
+            d3.select("#pie svg").remove();
+            document.getElementById("header").innerHTML = "";
         }
 
 
