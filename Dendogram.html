@@ -86,6 +86,55 @@
             background-color: white;
         }
 
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+
+        .bar {
+            fill: orange;
+        }
+
+        .bar:hover {
+            fill: orangered;
+        }
+
+        .x.axis path {
+            display: none;
+        }
+
+        .d3-tip {
+            line-height: 1;
+            font-weight: bold;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            border-radius: 2px;
+        }
+
+        /* Creates a small triangle extender for the tooltip */
+        .d3-tip:after {
+            box-sizing: border-box;
+            display: inline;
+            font-size: 10px;
+            width: 100%;
+            line-height: 1;
+            color: rgba(0, 0, 0, 0.8);
+            content: "\25BC";
+            position: absolute;
+            text-align: center;
+        }
+
+        /* Style northward tooltips differently */
+        .d3-tip.n:after {
+            margin: -1px 0 0 0;
+            top: 100%;
+            left: 0;
+        }
+
     </style>
 
 </head>
@@ -128,6 +177,8 @@
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
 
 <script>
 
@@ -349,6 +400,108 @@
         };
 
         setTimeout(restOfTheData, 1000);
+    }
+
+
+    function drawBar(data) {
+
+        var margin = {top: 40, right: 20, bottom: 30, left: 200},
+                width = 900 - margin.left - margin.right,
+                height = 300 - margin.top - margin.bottom;
+
+        var formatPercent = d3.format("$");
+
+        var x = d3.scale.ordinal()
+                .rangeRoundBands([0, 200], 0.5);
+
+        var y = d3.scale.linear()
+                .domain([0, d3.max(data)])
+                .range([height, 0]);
+
+        var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom");
+
+        var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left")
+                .tickFormat(formatPercent);
+
+        var tip = d3.tip()
+                .attr('class', 'd3-tip')
+                .offset([-10, 0])
+                .html(function (d) {
+                    return "<strong>Utilization:</strong> <span style='color:red'>" + d.value + "</span>";
+                });
+
+        var svg = d3.select("#pie")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        svg.call(tip);
+
+
+
+        x.domain(data.map(function (d) {
+            return d.name;
+        }));
+        y.domain([0, d3.max(data, function (d) {
+            return d.value;
+        })]);
+
+        svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+
+        svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis)
+                .append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", -140)
+                .attr("dy", ".71em")
+                .style("text-anchor", "end")
+                .text("Utilization");
+
+
+        svg.selectAll(".bar")
+                .data(data)
+                .enter()
+                .append("rect")
+                .attr("class", "bar")
+                .attr("x", function (d) {
+                    return x(d.name);
+                })
+                .attr("width", x.rangeBand())
+                .attr("y", function (d) {
+                    return height;
+                })
+                .attr("height", function (d) {
+                    return 0;
+                })
+                .on('mouseover', tip.show)
+                .on('mouseout', tip.hide)
+                .transition()
+                .duration(400)
+                .delay(function (d, i) {
+                    return i + 50;
+                })
+                .attr("y", function (d) {
+                    return y(d.value);
+                })
+                .attr("height", function (d){
+                    return y(0) - y(d.value);
+                });
+
+
+        function type(d) {
+            d.frequency = +d.value;
+            return d;
+        }
     }
 </script>
 
@@ -773,70 +926,46 @@
 
             var Counterparty = map[d.name];
 
-            let Avpercentage = 0;
-            let totalExpValue = 0;
             let Avlength = Counterparty["product-exp"].length;
+
+            var totalExpValue = [];
 
             for (let exp in Counterparty["product-exp"]) {
                 let Expvalue;
                 switch (Counterparty["product-exp"][exp]) {
                     case "PE_IRS":
                     case "PE_IRS1":
-                        Expvalue = IRSDealMap[d.name].value;
+                        Expvalue = { name: "IRS Deals", value: IRSDealMap[d.name].value<0?IRSDealMap[d.name].value * -1:IRSDealMap[d.name].value  };
                         break;
                     case "PE_BND":
                     case "PE_BND1":
-                        Expvalue = BondMap[d.name].value;
+                        Expvalue = { name: "Bonds", value: BondMap[d.name].value<0?BondMap[d.name].value * -1:BondMap[d.name].value   };
                         break;
                     case "PE_EQU":
                     case "PE_EQU1":
-                        Expvalue = EquititesMap[d.name].value;
+                        Expvalue = { name: "Equities", value: EquititesMap[d.name].value<0?EquititesMap[d.name].value * -1:EquititesMap[d.name].value   };
                         break;
                     case "PE_FXS":
                     case "PE_FXS1":
-                        Expvalue = FxSwapMap[d.name].value;
+                        Expvalue = { name: "Fx Swap Deals", value: FxSwapMap[d.name].value<0?FxSwapMap[d.name].value * -1:FxSwapMap[d.name].value };
                         break;
 
                     case "PE_FXO":
                     case "PE_FXO1":
-                        Expvalue = FxOTCMap[d.name].value;
+                        Expvalue = { name: "FxOTC Deals", value: FxOTCMap[d.name].value<0?FxOTCMap[d.name].value * -1:FxOTCMap[d.name].value };
                         break;
                     case "PE_LD":
                     case "PE_LD1":
-                        Expvalue = LDDealMap[d.name].value;
+                        Expvalue = { name: "L&D Deals", value: LDDealMap[d.name].value<0?LDDealMap[d.name].value * -1:LDDealMap[d.name].value  };
                         break;
                 }
 
-                Avpercentage += parseFloat((Expvalue / d.alloc * 100).toFixed(2));
-                totalExpValue = totalExpValue + Expvalue;
-            }
-            if (Avlength != 0) {
-                Avpercentage = parseFloat(Avpercentage / Avlength);
+                totalExpValue.push(Expvalue);
+                debugger;
             }
 
-            var Avdataset;
-
-            if (Avpercentage > 100) {
-                Avdataset = [{name: "Utilized", percent: Avpercentage.toFixed(2)}];
-            }
-            else if (Avpercentage < 0) {
-                Avdataset = [{name: "Utilized", percent: Avpercentage.toFixed(2) * -1}, {
-                    name: "Not Utilized",
-                    percent: (100 - Avpercentage * -1).toFixed(2)
-                }];
-            }
-            else {
-                Avdataset = [{name: "Utilized", percent: Avpercentage.toFixed(2)}, {
-                    name: "Not Utilized",
-                    percent: (100 - Avpercentage).toFixed(2)
-                }];
-            }
-
-            if(totalExpValue < 0) totalExpValue *=-1;
-
-
-            document.getElementById("header").innerHTML = "<br/><span>" + d.name + "</span><br/><span> Utilization - $"+ totalExpValue;
-            drawPie(Avdataset);
+            debugger;
+            drawBar(totalExpValue);
 
 
         }
