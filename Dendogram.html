@@ -62,14 +62,15 @@
             height: 40px;
             color: #000000;
             text-align: center;
-            line-height: 40px;
+            line-height: 20px;
             border-top-left-radius: 7px;
             border-top-right-radius: 7px;
-            font-weight: 400;
+            font-weight: 200;
             font-size: 1.5em;
             text-shadow: 1px 1px #ffffff;
             margin-bottom: 50px;
             margin-left: 150px;
+            font-size: 15px;
         }
 
         .chart-container {
@@ -758,8 +759,11 @@
                 }];
             }
 
+            debugger;
 
-            document.getElementById("header").innerHTML = "<span>" + d.parent.name + "</span><br/><span>" + d.name + "</span>";
+            if(value < 0) value *=-1;
+
+            document.getElementById("header").innerHTML = "<span>" + d.parent.name + "</span><br/><span>" + d.name + "</span><br/><span> Utilization - $"+ value;
             drawPie(dataset);
         }
 
@@ -770,6 +774,7 @@
             var Counterparty = map[d.name];
 
             let Avpercentage = 0;
+            let totalExpValue = 0;
             let Avlength = Counterparty["product-exp"].length;
 
             for (let exp in Counterparty["product-exp"]) {
@@ -803,6 +808,7 @@
                 }
 
                 Avpercentage += parseFloat((Expvalue / d.alloc * 100).toFixed(2));
+                totalExpValue = totalExpValue + Expvalue;
             }
             if (Avlength != 0) {
                 Avpercentage = parseFloat(Avpercentage / Avlength);
@@ -826,7 +832,10 @@
                 }];
             }
 
-            document.getElementById("header").innerHTML = "<br/><span>" + d.name + "</span>";
+            if(totalExpValue < 0) totalExpValue *=-1;
+
+
+            document.getElementById("header").innerHTML = "<br/><span>" + d.name + "</span><br/><span> Utilization - $"+ totalExpValue;
             drawPie(Avdataset);
 
 
