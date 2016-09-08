@@ -1014,6 +1014,8 @@
     function collapseAll() {
 
         d3.select("#pie svg").remove();
+        document.getElementById("header").innerHTML = "";
+
 
 
         root.children.forEach(collapse);
