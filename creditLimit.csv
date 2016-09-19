@@ -1,1 +1,43 @@
-Sr.No,ShortName,Name,Type,Allocation Type,Allocation,Product Exposure,Currency,Coverage-Counterparty,Rating,Sector,Time Band13,LIMIT_LD2,Limit Loan Deposit2,Entity,Finite,"1,00,00,00,000.00",PE_LD,USD,Aerolineas Argentinas,C,SEC_3,99935,LIMIT_EQU12,Limit EQUITY12,Entity,Finite,"1,00,00,00,000.00",PE_EQU1,USD,Aerolineas Argentinas,C,SEC_3,9994,LIMIT_FXO,Limit FX OTC Options,Entity,Finite,"1,00,00,00,000.00",PE_FXO,USD,Bank of America,AA,SEC_7,99918,LIMIT_EQU2,Limit EQUITY2,Entity,Finite,"1,00,00,00,000.00",PE_EQU,USD,Bank of America,AA,SEC_7,99936,LIMIT_FXS4,Limit FX SWAP4,Entity,Finite,"1,00,00,00,001.00",PE_FXS1,USD,Bank of America,AA,SEC_7,9997,LIMIT_LD1,Limit Loan Deposit1,Entity,Finite,"1,00,00,00,000.00",PE_LD,USD,Barclays London,AA,SEC_7,99917,LIMIT_BND2,Limit BOND2,Entity,Finite,"1,00,00,00,000.00",PE_BND,USD,Barclays London,AA,SEC_7,99915,LIMIT_FXO2,Limit FX OTC Options2,Entity,Finite,"1,00,00,00,000.00",PE_FXO1,USD,Calimax,BB,SEC_3,99925,LIMIT_LD4,Limit Loan Deposit4,Entity,Finite,"1,00,00,00,000.00",PE_LD1,USD,Capgemini,BBB,SEC_8,9995,LIMIT_IRS,Limit Interest Rate Swaps,Entity,Finite,"1,00,00,00,000.00",PE_IRS,USD,Citi Bank,A,SEC_7,99911,LIMIT_BND1,Limit BOND1,Entity,Finite,"1,00,00,00,000.00",PE_BND,USD,Citi Bank,A,SEC_7,99924,LIMIT_EQU3,Limit EQUITY3,Entity,Finite,"1,00,00,00,000.00",PE_EQU,USD,Citi Bank,A,SEC_7,99933,LIMIT_EQU10,Limit EQUITY10,Entity,Finite,"1,00,00,00,000.00",PE_EQU1,USD,Copacol,CCC,SEC_3,99916,LIMIT_IRS2,Limit Interest Rate Swaps2,Entity,Finite,"1,00,00,00,000.00",PE_IRS1,USD,Danfoss,B,SEC_3,99930,LIMIT_EQU7,Limit EQUITY7,Entity,Finite,"1,00,00,00,000.00",PE_EQU,USD,Electricity of France,A,SEC_6,9999,LIMIT_FXO1,Limit FX OTC Options1,Entity,Finite,"1,00,00,00,000.00",PE_FXO,USD,Emirates,AAA,SEC_3,99926,LIMIT_BND4,Limit BOND4,Entity,Finite,"1,00,00,00,000.00",PE_BND1,USD,Emirates,AAA,SEC_3,99910,LIMIT_IRS1,Limit Interest Rate Swaps1,Entity,Finite,"1,00,00,00,000.00",PE_IRS,USD,Fairchild Group,B,SEC_6,99932,LIMIT_EQU9,Limit EQUITY9,Entity,Finite,"1,00,00,00,000.00",PE_EQU1,USD,Fairchild Group,B,SEC_6,99928,LIMIT_EQU5,Limit EQUITY5,Entity,Finite,"1,00,00,00,000.00",PE_EQU,USD,General Motors,BB,SEC_3,99934,LIMIT_EQU11,Limit EQUITY11,Entity,Finite,"1,00,00,00,000.00",PE_EQU1,USD,General Motors,BB,SEC_3,99931,LIMIT_EQU8,Limit EQUITY8,Entity,Finite,"1,00,00,00,000.00",PE_EQU,USD,Goldman Sachs,AAA,SEC_7,99927,LIMIT_EQU4,Limit EQUITY4,Entity,Finite,"1,00,00,00,000.00",PE_EQU,USD,Government of China,AA,SEC_11,9998,LIMIT_FXS1,Limit FX SWAP1,Entity,Finite,"1,00,00,00,000.00",PE_FXS,USD,Government of India,A,SEC_11,99923,LIMIT_BND3,Limit BOND3,Entity,Finite,"1,00,00,00,000.00",PE_BND1,USD,Government of India,A,SEC_11,99920,LIMIT_FXS3,Limit FX SWAP3,Entity,Finite,"1,00,00,00,000.00",PE_FXS1,USD,ING UK,AA,SEC_7,9993,LIMIT_FXS,Limit FX SWAP,Entity,Finite,"1,00,00,00,000.00",PE_FXS,USD,J.P. Morgan Chase,AA,SEC_7,99912,LIMIT_EQU1,Limit EQUITY1,Entity,Finite,"1,00,00,00,000.00",PE_EQU,USD,J.P. Morgan Chase,AA,SEC_7,99919,LIMIT_LD3,Limit Loan Deposit3,Entity,Finite,"1,00,00,00,000.00",PE_LD1,USD,Magix,D,SEC_9,9992,LIMIT_LD,Limit Loan Deposit,Entity,Finite,"1,00,00,00,000.00",PE_LD,USD,Reliance,AA,SEC_1,99929,LIMIT_EQU6,Limit EQUITY6,Entity,Finite,"1,00,00,00,000.00",PE_EQU,USD,Reuters,AAA,SEC_5,99914,LIMIT_FXS2,Limit FX SWAP2,Entity,Finite,"1,00,00,00,000.00",PE_FXS1,USD,Semex,A,SEC_3,9991,LIMIT_BND,Limit BOND,Entity,Finite,"1,00,00,00,000.00",PE_BND,USD,US Government,AAA,SEC_11,9996,LIMIT_EQU,Limit EQUITY,Entity,Finite,"1,00,00,00,000.00",PE_EQU,USD,US Government,AAA,SEC_11,99922,LIMIT_IRS3,Limit Interest Rate Swaps3,Entity,Finite,"1,00,00,00,000.00",PE_IRS1,USD,Virgin Trains,C,SEC_9,99921,LIMIT_FXO3,Limit FX OTC Options3,Entity,Finite,"1,00,00,00,000.00",PE_FXO1,USD,Vita,CCC,SEC_9,999,LIMIT_EQU,Limit EQUITY,Entity,Finite,"1,00,00,00,000.00",PE_EQU,USD,Banco do Brasil,CC,SEC_7,999,LIMIT_LD,Limit Loan Deposit3,Entity,Finite,"1,00,00,00,000.00",PE_LD,USD,Banco do Brasil,CC,SEC_7,999,LIMIT_FXO3,Limit FX OTC Options3,Entity,Finite,"1,00,00,00,000.00",PE_FXO1,USD,Banco do Brasil,CC,SEC_7,999
+Sr.No,ShortName,Name,Type,Allocation Type,Allocation,Product Exposure,Currency,Coverage-Counterparty,Rating,Sector,Time Band
+13,LIMIT_LD2,Limit Loan Deposit2,Entity,Finite,"1,00,00,00,000.00",PE_LD,USD,Aerolineas Argentinas,C,SEC_3,999
+35,LIMIT_EQU12,Limit EQUITY12,Entity,Finite,"1,00,00,00,000.00",PE_EQU1,USD,Aerolineas Argentinas,C,SEC_3,999
+4,LIMIT_FXO,Limit FX OTC Options,Entity,Finite,"1,00,00,00,000.00",PE_FXO,USD,Bank of America,AA,SEC_7,999
+18,LIMIT_EQU2,Limit EQUITY2,Entity,Finite,"1,00,00,00,000.00",PE_EQU,USD,Bank of America,AA,SEC_7,999
+36,LIMIT_FXS4,Limit FX SWAP4,Entity,Finite,"1,00,00,00,001.00",PE_FXS1,USD,Bank of America,AA,SEC_7,999
+7,LIMIT_LD1,Limit Loan Deposit1,Entity,Finite,"1,00,00,00,000.00",PE_LD,USD,Barclays London,AA,SEC_7,999
+17,LIMIT_BND2,Limit BOND2,Entity,Finite,"1,00,00,00,000.00",PE_BND,USD,Barclays London,AA,SEC_7,999
+15,LIMIT_FXO2,Limit FX OTC Options2,Entity,Finite,"1,00,00,00,000.00",PE_FXO1,USD,Calimax,BB,SEC_3,999
+25,LIMIT_LD4,Limit Loan Deposit4,Entity,Finite,"1,00,00,00,000.00",PE_LD1,USD,Capgemini,BBB,SEC_8,999
+5,LIMIT_IRS,Limit Interest Rate Swaps,Entity,Finite,"1,00,00,00,000.00",PE_IRS,USD,Citi Bank,A,SEC_7,999
+11,LIMIT_BND1,Limit BOND1,Entity,Finite,"1,00,00,00,000.00",PE_BND,USD,Citi Bank,A,SEC_7,999
+24,LIMIT_EQU3,Limit EQUITY3,Entity,Finite,"1,00,00,00,000.00",PE_EQU,USD,Citi Bank,A,SEC_7,999
+33,LIMIT_EQU10,Limit EQUITY10,Entity,Finite,"1,00,00,00,000.00",PE_EQU1,USD,Copacol,CCC,SEC_3,999
+16,LIMIT_IRS2,Limit Interest Rate Swaps2,Entity,Finite,"1,00,00,00,000.00",PE_IRS1,USD,Danfoss,B,SEC_3,999
+30,LIMIT_EQU7,Limit EQUITY7,Entity,Finite,"1,00,00,00,000.00",PE_EQU,USD,Electricity of France,A,SEC_6,999
+9,LIMIT_FXO1,Limit FX OTC Options1,Entity,Finite,"1,00,00,00,000.00",PE_FXO,USD,Emirates,AAA,SEC_3,999
+26,LIMIT_BND4,Limit BOND4,Entity,Finite,"1,00,00,00,000.00",PE_BND1,USD,Emirates,AAA,SEC_3,999
+10,LIMIT_IRS1,Limit Interest Rate Swaps1,Entity,Finite,"1,00,00,00,000.00",PE_IRS,USD,Fairchild Group,B,SEC_6,999
+32,LIMIT_EQU9,Limit EQUITY9,Entity,Finite,"1,00,00,00,000.00",PE_EQU1,USD,Fairchild Group,B,SEC_6,999
+28,LIMIT_EQU5,Limit EQUITY5,Entity,Finite,"1,00,00,00,000.00",PE_EQU,USD,General Motors,BB,SEC_3,999
+34,LIMIT_EQU11,Limit EQUITY11,Entity,Finite,"1,00,00,00,000.00",PE_EQU1,USD,General Motors,BB,SEC_3,999
+31,LIMIT_EQU8,Limit EQUITY8,Entity,Finite,"1,00,00,00,000.00",PE_EQU,USD,Goldman Sachs,AAA,SEC_7,999
+27,LIMIT_EQU4,Limit EQUITY4,Entity,Finite,"1,00,00,00,000.00",PE_EQU,USD,Government of China,AA,SEC_11,999
+8,LIMIT_FXS1,Limit FX SWAP1,Entity,Finite,"1,00,00,00,000.00",PE_FXS,USD,Government of India,A,SEC_11,999
+23,LIMIT_BND3,Limit BOND3,Entity,Finite,"1,00,00,00,000.00",PE_BND1,USD,Government of India,A,SEC_11,999
+20,LIMIT_FXS3,Limit FX SWAP3,Entity,Finite,"1,00,00,00,000.00",PE_FXS1,USD,ING UK,AA,SEC_7,999
+3,LIMIT_FXS,Limit FX SWAP,Entity,Finite,"1,00,00,00,000.00",PE_FXS,USD,J.P. Morgan Chase,AA,SEC_7,999
+12,LIMIT_EQU1,Limit EQUITY1,Entity,Finite,"1,00,00,00,000.00",PE_EQU,USD,J.P. Morgan Chase,AA,SEC_7,999
+19,LIMIT_LD3,Limit Loan Deposit3,Entity,Finite,"1,00,00,00,000.00",PE_LD1,USD,Magix,D,SEC_9,999
+2,LIMIT_LD,Limit Loan Deposit,Entity,Finite,"1,00,00,00,000.00",PE_LD,USD,Reliance,AA,SEC_1,999
+29,LIMIT_EQU6,Limit EQUITY6,Entity,Finite,"1,00,00,00,000.00",PE_EQU,USD,Reuters,AAA,SEC_5,999
+14,LIMIT_FXS2,Limit FX SWAP2,Entity,Finite,"1,00,00,00,000.00",PE_FXS1,USD,Semex,A,SEC_3,999
+1,LIMIT_BND,Limit BOND,Entity,Finite,"1,00,00,00,000.00",PE_BND,USD,US Government,AAA,SEC_11,999
+6,LIMIT_EQU,Limit EQUITY,Entity,Finite,"1,00,00,00,000.00",PE_EQU,USD,US Government,AAA,SEC_11,999
+22,LIMIT_IRS3,Limit Interest Rate Swaps3,Entity,Finite,"1,00,00,00,000.00",PE_IRS1,USD,Virgin Trains,C,SEC_9,999
+21,LIMIT_FXO3,Limit FX OTC Options3,Entity,Finite,"1,00,00,00,000.00",PE_FXO1,USD,Vita,CCC,SEC_9,999
+,LIMIT_EQU,Limit EQUITY,Entity,Finite,"1,00,00,00,000.00",PE_EQU,USD,Banco do Brasil,CC,SEC_7,999
+,LIMIT_LD,Limit Loan Deposit3,Entity,Finite,"1,00,00,00,000.00",PE_LD,USD,Banco do Brasil,CC,SEC_7,999
+,LIMIT_FXO3,Limit FX OTC Options3,Entity,Finite,"1,00,00,00,000.00",PE_FXO1,USD,Banco do Brasil,CC,SEC_7,999
+,LIMIT_EQU,Limit EQUITY,,Finite,"1,00,00,00,000.00",PE_EQU,USD,Hitachi,AA,SEC_2,999
+,LIMIT_LD,Limit Loan Deposit3,,Finite,"1,00,00,00,000.00",PE_LD,USD,Hitachi,AA,SEC_2,999
+,LIMIT_IRS3,Limit Interest Rate Swaps3,,Finite,"1,00,00,00,000.00",PE_IRS1,USD,Hitachi,AA,SEC_2,999
